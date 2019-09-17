@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mysiteforme.admin.dao.CourseDao">
+     <select id="getAllCourseByFilter" resultType="com.mysiteforme.admin.entity.Course">
+           select * from course where 1=1
+          <if test="filter!=null and filter!=''">
+          	and name like "%"#{filter}"%"
+          </if>
+          limit #{before},#{after}
+     </select>
+      <!--查询所有课程总数  -->
+      <select id="getTotalCourse" resultType="int">
+         select count(*) FROM course where 1=1
+          <if test="filter!=null and filter!=''">
+          	and name like "%"#{filter}"%"
+          </if>
+      </select>
+     <!-- 添加课程 -->
+     <insert id="addCourse" parameterType="com.mysiteforme.admin.entity.Course">
+         insert into course(name,code,note)
+         values(#{name},#{code},#{note})
+     </insert>
+     <!-- 删除课程 -->
+      <delete id="deleteCourse">
+             delete from course
+             where id=#{id}
+      </delete>
+      <!-- 更改课程 -->
+      <update id="updateCourse" parameterType="com.mysiteforme.admin.entity.Course">
+         update course
+         set name=#{name},code=#{code},note=#{note}
+         where id=#{id}
+      </update>
+</mapper>

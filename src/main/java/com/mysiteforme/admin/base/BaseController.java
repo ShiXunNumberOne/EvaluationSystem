@@ -61,4 +61,13 @@ public class BaseController {
 
 	@Autowired
 	protected UploadInfoService uploadInfoService;
+
+	@Autowired
+	protected  ClazzService clazzService;
+
+	@Autowired
+	protected  CourseService courseService;
+
+	@Autowired
+	protected  DeptService deptService;
 }

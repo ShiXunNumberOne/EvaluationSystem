@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysiteforme.admin.dao.ClazzDao">
+
+	<!--  查询所有班级并分页 -->
+	    <select id="getClazzs" parameterType="com.mysiteforme.admin.entity.Clazz" resultType="com.mysiteforme.admin.entity.Clazz">
+     SELECT * FROM clazz 
+     <if test="clazz.name!=null and clazz.name!=''">
+          and name like "%"#{name}"%"
+     </if>
+     <if test="clazz.code!=null and clazz.code !=''">
+          and code like "%"#{code}"%"
+     </if>
+      limit #{before},#{after}
+     </select>
+     
+     
+     <!-- 查询班级总数 -->
+     <select id="getTotalClazz" resultType="int">
+     select count(*) from clazz
+     </select>
+     
+     <!-- 查询班级（新增用户下拉显示） -->
+     <select id="queryClazzs" resultType="com.mysiteforme.admin.entity.Clazz">
+     	select * from clazz 
+     </select>
+     
+	<!--新增班级 -->
+    <insert id="insertClazz" parameterType="com.mysiteforme.admin.entity.Clazz" >
+      insert into clazz(name,code,dept_id,status) 
+      values(#{name},#{code},#{dept_id},#{status})
+    </insert>
+   
+   
+    <!-- 修改班级 -->
+    <update id="updateClazz" parameterType="com.mysiteforme.admin.entity.Clazz">
+   update clazz
+  		 <set>
+  		 	<if test="name!=null and name!=''">
+  		 		name=#{name},
+  		 	</if>
+  		 	<if test="dept_id!=null and dept_id!=''">
+  		 		dept_id=#{dept_id},
+  		 	</if>
+  		 	<if test="code!=null and code!=''">
+  		 		code=#{code},
+  		 	</if>
+  		 </set> 
+  		 where id=#{id};
+	  </update>
+	  
+	  <!-- 查看班级详细信息 -->
+	  <select id="getClazzById" parameterType="int" resultType="com.mysiteforme.admin.entity.Clazz">
+	  	select * from clazz where id=#{id}
+	  
+	  </select>
+	  
+
+	  
+	  
+	  <!-- 禁用班级 -->
+	  <update id="deleteClazzs" parameterType="String">
+	  	update clazz set status =0 where id=#{cidlist}
+	  </update>
+    
+    <!-- 恢复班级 -->
+	  <update id="recoverClazz" parameterType="int">
+	  	update clazz set status =1 where id=#{id}
+	  </update>
+ 
+    
+    </mapper>
