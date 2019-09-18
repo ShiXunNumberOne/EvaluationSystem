@@ -29,7 +29,6 @@ public class DeptController extends BaseController {
         return "admin/system/dept/list";
     }
 
-    @RequiresPermissions("sys:dept:list")
     @PostMapping("list")
     @ResponseBody
     public LayerData<Dept> list(@RequestParam(value = "page",defaultValue = "1")Integer page,

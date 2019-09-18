@@ -10,16 +10,11 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
-import com.mysiteforme.admin.entity.Clazz;
 import com.mysiteforme.admin.entity.Course;
-import com.mysiteforme.admin.service.CourseService;
 import com.mysiteforme.admin.util.LayerData;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 @Controller
@@ -32,7 +27,6 @@ public class CourseController extends BaseController {
         return "admin/system/course/list";
     }
 
-    @RequiresPermissions("sys:course:list")
     @PostMapping("list")
     @ResponseBody
     public LayerData<Course> list(@RequestParam(value = "page",defaultValue = "1")Integer page,

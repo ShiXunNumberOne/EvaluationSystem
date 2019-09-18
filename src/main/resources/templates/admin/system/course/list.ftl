@@ -76,8 +76,8 @@
             cols: [[
                 {type:'checkbox'},
                 {field:'id', title: 'ID'},
-                {field:'name', title: '班级名称'},
-                {field:'code',  title: '班级代码',    width:'10%'},
+                {field:'name', title: '课程名称'},
+                {field:'code',  title: '课程代码',    width:'10%'},
                 {fixed: 'right',    width: '15%', align: 'center',toolbar: '#barDemo'}
             ]],
         };

@@ -75,11 +75,15 @@
             width: $(parent.window).width()-223,
             cols: [[
                 {type:'checkbox'},
+                {field:'id', title: 'ID',width:'8%'},
+                {field:'name',  title: '所属学院',templet:'<div>{{  d.dept.name }}</div>'},
                 {field:'name', title: '班级名称'},
+                {field:'code', title: '班级代码'},
                 {fixed: 'right',    width: '15%', align: 'center',toolbar: '#barDemo'}
             ]]
         };
         table.render(t);
+        console.log(t.data);
 
         //监听工具条
         table.on('tool(demo)', function(obj){

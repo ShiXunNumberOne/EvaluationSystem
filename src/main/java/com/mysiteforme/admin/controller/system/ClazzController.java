@@ -1,26 +1,20 @@
 package com.mysiteforme.admin.controller.system;
 
+
 import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
 import com.mysiteforme.admin.entity.Clazz;
 import com.mysiteforme.admin.entity.Dept;
-import com.mysiteforme.admin.entity.Role;
 import com.mysiteforme.admin.entity.User;
-import com.mysiteforme.admin.service.ClazzService;
 import com.mysiteforme.admin.util.LayerData;
-import com.mysiteforme.admin.util.RestResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
@@ -37,7 +31,6 @@ public class ClazzController extends BaseController {
 		return "admin/system/clazz/list";
 	}
 
-	@RequiresPermissions("sys:clazz:list")
 	@PostMapping("list")
 	@ResponseBody
 	public LayerData<Clazz> list(@RequestParam(value = "page",defaultValue = "1")Integer page,
@@ -54,10 +47,21 @@ public class ClazzController extends BaseController {
 		}
 		Page<Clazz> clazzPage = clazzService.selectPage(new Page<>(page,limit),clazzEntityWrapper);
 		clazzLayerData.setCount(clazzPage.getTotal());
-		clazzLayerData.setData(clazzPage.getRecords());
+		clazzLayerData.setData(setDeptToClazz(clazzPage.getRecords()));
 		return  clazzLayerData;
 	}
-
+    private List<Clazz> setDeptToClazz(List<Clazz> clazzs) {
+        for (Clazz c : clazzs) {
+            if (c.getId() != null && c.getId() != 0) {
+                Dept d = deptService.selectById(c.getDeptId());
+                if (StringUtils.isBlank(d.getName())) {
+                    d.setName(d.getName());
+                }
+                c.setDept(d);
+            }
+        }
+        return clazzs;
+    }
 
 //	@GetMapping("add")
 //	public String add(Model model){

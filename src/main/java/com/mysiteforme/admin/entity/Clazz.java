@@ -3,10 +3,12 @@ package com.mysiteforme.admin.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @TableName("clazz")
-public class Clazz {
+public class Clazz implements Serializable {
 	private Integer id;
 	private String name;
 	private String code;
@@ -24,6 +26,18 @@ public class Clazz {
 
 	@TableField(exist = false)
 	private List<User> user;
+
+
+	public Dept getDept() {
+		return dept;
+	}
+
+	public void setDept(Dept dept) {
+		this.dept = dept;
+	}
+
+	@TableField(exist = false)
+	private Dept dept;
 
 	public List<User> getUser() {
 		return user;
