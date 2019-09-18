@@ -39,7 +39,7 @@
     <script type="text/html" id="clazzStatus">
         <!-- 这里的 checked 的状态只是演示 -->
         {{#  if(d.status == false){ }}
-        <span class="layui-badge layui-bg-green">正常111</span>
+        <span class="layui-badge layui-bg-green">正常</span>
         {{#  } else { }}
         <span class="layui-badge layui-bg-gray">停用</span>
         {{#  } }}
