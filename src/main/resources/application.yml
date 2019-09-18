@@ -51,7 +51,7 @@ spring:
   #缓存配置
   cache:
       type: redis
-      cache-names: mysiteforme
+      cache-names: evaluationSystem
 #mybatisPlus
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -113,11 +113,11 @@ spring:
 #日志
 logging:
   config: classpath:log/logback.xml
-  path: D:\log\mysiteforme
+  path: D:\log\evaluationSystem
 
 #自定义配置属性
 #源码生成文件夹
-source-code-dic:  D://mysite
+source-code-dic:  D://evaluationSys
 source-code-zipfile:  D://源码.rar
 
 #搜索文件生成包的位置
@@ -152,7 +152,7 @@ spring:
 #日志
 logging:
   config: classpath:log/logback.xml
-  path: /home/log/mysiteforme
+  path: /home/log/evaluationSystem
 
 #自定义配置属性
 #源码生成文件夹
@@ -192,7 +192,7 @@ spring:
 #日志
 logging:
   config: classpath:log/logback.xml
-  path: /home/log/mysiteforme
+  path: /home/log/evaluationSystem
 
 #自定义配置属性
 #源码生成文件夹
