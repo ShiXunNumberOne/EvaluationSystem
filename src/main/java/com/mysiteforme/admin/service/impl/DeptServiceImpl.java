@@ -17,8 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class DeptServiceImpl extends ServiceImpl<DeptDao, Dept> implements DeptService {
-
+public class DeptServiceImpl  extends ServiceImpl<DeptDao, Dept> implements DeptService {
 
 	@Override
 	public Dept saveDept(Dept dept) {
@@ -30,25 +29,36 @@ public class DeptServiceImpl extends ServiceImpl<DeptDao, Dept> implements DeptS
 	public Dept findDeptById(int id) {
 		Map<String,Object> map = Maps.newHashMap();
 		map.put("id", id);
-		Dept d= baseMapper.selectDeptByMap(map);
-		return d;
+		Dept c= baseMapper.selectDeptByMap(map);
+		return c;
 	}
 
-	@Override
-	public int updataDeptById(Dept dept) {
-		int d =baseMapper.updataDeptById(dept);
-		return d;
-	}
-
-	@Override
-	public int deleteDeptById(int id) {
-		int d = baseMapper.deleteDeptById(id);
-		return d;
-	}
 	@Override
 	public List<Dept> selectAll() {
 		EntityWrapper<Dept> wrapper = new EntityWrapper<>();
 		List<Dept> deptList = baseMapper.selectList(wrapper);
 		return deptList;
 	}
+
+	@Override
+	public Dept selectDeptByMap(int deptId) {
+		Map<String,Object> map = Maps.newHashMap();
+		map.put("deptId", deptId);
+		Dept c= baseMapper.selectDeptByMap(map);
+		return c;
+	}
+
+	@Override
+	public int updataDeptById(Dept dept) {
+		int c = baseMapper.updataDeptById(dept);
+		return c;
+	}
+
+	@Override
+	public int deleteDeptById(int id) {
+		int c = baseMapper.deleteDeptById(id);
+		return c;
+	}
+
+
 }

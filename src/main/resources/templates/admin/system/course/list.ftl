@@ -25,7 +25,7 @@
             <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
         </div>
         <div class="layui-inline">
-            <a class="layui-btn layui-btn-normal" data-type="addClazz">添加班级</a>
+            <a class="layui-btn layui-btn-normal" data-type="addClazz">添加课程</a>
         </div>
         <div class="layui-inline">
             <a class="layui-btn layui-btn-danger" data-type="deleteSome">批量删除</a>
@@ -90,7 +90,7 @@
                 var editIndex = layer.open({
                     title : "编辑用户",
                     type : 2,
-                    content : "${base}/admin/system/user/edit?id="+data.id,
+                    content : "${base}/admin/system/course/edit?id="+data.id,
                     success : function(layero, index){
                         setTimeout(function(){
                             layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
@@ -108,7 +108,7 @@
             if(obj.event === "del"){
                 layer.confirm("你确定要删除该用户么？",{btn:['是的,我确定','我再想想']},
                     function(){
-                        $.post("${base}/admin/system/user/delete",{"id":data.id},function (res){
+                        $.post("${base}/admin/system/course/delete",{"id":data.id},function (res){
                            if(res.success){
                                layer.msg("删除成功",{time: 1000},function(){
                                    table.reload('test', t);
@@ -127,12 +127,12 @@
         var active={
             addUser : function(){
                 var addIndex = layer.open({
-                    title : "添加会员",
+                    title : "添加",
                     type : 2,
-                    content : "${base}/admin/system/user/add",
+                    content : "${base}/admin/system/course/add",
                     success : function(layero, addIndex){
                         setTimeout(function(){
-                            layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
+                            layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
                                 tips: 3
                             });
                         },500);
@@ -151,17 +151,13 @@
                     console.log(JSON.stringify(data));
                     for(var i=0;i<data.length;i++){
                         var d = data[i];
-                        if(d.id === 1){
-                            layer.msg("不能删除超级管理员");
-                            return false;
-                        }
                     }
                     layer.confirm("你确定要删除这些用户么？",{btn:['是的,我确定','我再想想']},
                         function(){
                             var deleteindex = layer.msg('删除中，请稍候',{icon: 16,time:false,shade:0.8});
                             $.ajax({
                                 type:"POST",
-                                url:"${base}/admin/system/user/deleteSome",
+                                url:"${base}/admin/system/course/deleteSome",
                                 dataType:"json",
                                 contentType:"application/json",
                                 data:JSON.stringify(data),

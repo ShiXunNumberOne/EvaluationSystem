@@ -27,36 +27,28 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
-    <input class="layui-hide" name="id" value="${clazz.id}"/>
+    <input class="layui-hide" name="id" value="${dept.id}"/>
     <div class="layui-form-item">
-        <label class="layui-form-label">班级名称</label>
+        <label class="layui-form-label">学院名称</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="班级名称" value="${clazz.name}">
+            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="学院名称" value="${dept.name}">
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">班级代码</label>
+            <label class="layui-form-label">排序码</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="code" lay-verify="required" placeholder="班级代码" value="${clazz.code}">
-            </div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">学院ID</label>
-            <div class="layui-input-block">
-                <input type="text" class="layui-input" name="dept_id" readonly="readonly" value="${clazz.deptId}">
+                <input type="text" class="layui-input" name="sort_code" lay-verify="required" placeholder="排序码" value="${dept.sort_code}">
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">是否启用</label>
         <div class="layui-input-block">
-            <input type="checkbox" name="status" lay-skin="switch" value="1"  lay-text="启用|停用" <#if (clazz.status  == 1)>checked=""</#if> >
+            <input type="checkbox" name="status" lay-skin="switch" value="1"  lay-text="启用|停用" <#if (dept.status  == 1)>checked=""</#if> >
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="addClazz">我要修改</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addDept">我要修改</button>
             <button class="layui-btn"   class="layui-btn layui-btn-primary">我不改了</button>
         </div>
     </div>
@@ -68,11 +60,11 @@
         var form = layui.form,
                 $    = layui.jquery,
                 layer = layui.layer,
-                status = ${clazz.status};
+                status = ${dept.status};
 
-        form.on("submit(addClazz)",function(data){
+        form.on("submit(addDept)",function(data){
             if(data.field.id == null){
-                layer.msg("班级ID不存在");
+                layer.msg("ID不存在");
                 return false;
             }
             //判断用户是否启用
@@ -86,14 +78,14 @@
             });
             $.ajax({
                 type:"POST",
-                url:"${base}/admin/system/clazz/edit",
+                url:"${base}/admin/system/dept/edit",
                 dataType:"json",
                 contentType:"application/json",
                 data:JSON.stringify(data.field),
                 success:function(res){
                     layer.close(loadIndex);
                     if(res.success){
-                        parent.layer.msg("班级编辑成功！",{time:1500},function(){
+                        parent.layer.msg("学院编辑成功！",{time:1500},function(){
                             parent.location.reload();
                         });
                     }else{

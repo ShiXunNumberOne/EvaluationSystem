@@ -34,18 +34,27 @@
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
     <div class="layui-form-item">
-        <label class="layui-form-label">学院名称</label>
+        <label class="layui-form-label">班级名称</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="学院名称">
+            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="请输入班级">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">排序码</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" name="sort_code" lay-verify="required" placeholder="排序码">
+        <div class="layui-inline">
+            <label class="layui-form-label">班级代码</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="code" lay-verify="required" placeholder="请输入班级代码">
+            </div>
         </div>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">班级-学院</label>
+        <div class="layui-input-block">
+            <select name="dept_id" id="dept" lay-verify="required" lay-search>
+                <option value="">请选择学院</option>
+            </select>
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">是否启用</label>
         <div class="layui-input-block">
@@ -54,7 +63,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="addDept">立即提交</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addClazz">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
@@ -65,12 +74,29 @@
         var form = layui.form,
             $    = layui.jquery,
             layer = layui.layer;
-            status = 1;    //默认启用
-
-        form.on("submit(addDept)",function(data){
+            status = 1;    //默认启用用户
+        $.ajax({
+            url: '${base}/admin/system/clazz/queryDept',
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+                $.each(data.data, function (index,item) {
+                    $('#dept').append(new Option(item.name,item.id));// 下拉菜单里添加元素
+                });
+                layui.form.render("select");
+            }
+        })
+        form.on('select', function(data){
+        });
+        form.on("submit(addClazz)",function(data){
             var loadIndex = layer.load(2, {
                 shade: [0.3, '#333']
             });
+            var selectMatch= [];
+            $('input[name="dept_id"]:checked').each(function(){
+                selectMatch.push({"id":$(this).val()});
+            });
+            data.field.depts= selectMatch;
             //判断用户是否启用
             if(undefined !== data.field.status && null != data.field.status){
                 data.field.status = 0;
@@ -79,14 +105,14 @@
             }
             $.ajax({
                 type:"POST",
-                url:"${base}/admin/system/dept/add",
+                url:"${base}/admin/system/clazz/add",
                 dataType:"json",
                 contentType:"application/json",
                 data:JSON.stringify(data.field),
                 success:function(res){
                     layer.close(loadIndex);
                     if(res.success){
-                        parent.layer.msg("学院添加成功!",{time:1500},function(){
+                        parent.layer.msg("班级添加成功!",{time:1500},function(){
                             //刷新父页面
                             parent.location.reload();
                         });

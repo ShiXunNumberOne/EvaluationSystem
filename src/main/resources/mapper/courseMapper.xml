@@ -3,34 +3,44 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mysiteforme.admin.dao.CourseDao">
-     <select id="getAllCourseByFilter" resultType="com.mysiteforme.admin.entity.Course">
-           select * from course where 1=1
-          <if test="filter!=null and filter!=''">
-          	and name like "%"#{filter}"%"
-          </if>
-          limit #{before},#{after}
-     </select>
-      <!--查询所有课程总数  -->
-      <select id="getTotalCourse" resultType="int">
-         select count(*) FROM course where 1=1
-          <if test="filter!=null and filter!=''">
-          	and name like "%"#{filter}"%"
-          </if>
-      </select>
-     <!-- 添加课程 -->
-     <insert id="addCourse" parameterType="com.mysiteforme.admin.entity.Course">
-         insert into course(name,code,note)
-         values(#{name},#{code},#{note})
-     </insert>
-     <!-- 删除课程 -->
-      <delete id="deleteCourse">
-             delete from course
-             where id=#{id}
-      </delete>
-      <!-- 更改课程 -->
-      <update id="updateCourse" parameterType="com.mysiteforme.admin.entity.Course">
-         update course
-         set name=#{name},code=#{code},note=#{note}
-         where id=#{id}
-      </update>
+<resultMap type="com.mysiteforme.admin.entity.Course" id="CourseMap">
+    <id property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="code" column="code"/>
+    <result property="status" column="status"/>
+    <result property="note" column="note"/>
+    <collection property="user"  ofType="com.mysiteforme.admin.entity.User">
+        <result property="id" column="id"/>
+        <result property="nickName" column="nick_name"/>
+    </collection>
+    <collection property="depts"  ofType="com.mysiteforme.admin.entity.Dept">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </collection>
+</resultMap>
+<select id="selectCourseByMap" resultMap="CourseMap"  parameterType="java.util.Map">
+       select * from course where id=#{id}
+    </select>
+
+<update id="updataCourseById" parameterType="com.mysiteforme.admin.entity.Course" >
+update course
+<set>
+    <if test="name!=null">
+        name=#{name},
+    </if>
+    <if test="code!=null">
+        code=#{code},
+    </if>
+    <if test="note!=null">
+        note=#{note},
+    </if>
+    <if test="status!=null">
+        status=#{status},
+    </if>
+</set>
+where id=#{id}
+</update>
+<delete id="deleteCourseById" parameterType="java.util.Map">
+        delete from course where id=#{id}
+    </delete>
 </mapper>

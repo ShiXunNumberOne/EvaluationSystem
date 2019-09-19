@@ -13,7 +13,7 @@ public class Course {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	
+
 	public Integer getStatus() {
 		return status;
 	}
@@ -38,7 +38,7 @@ public class Course {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
 
-	
+
+
 }

@@ -27,7 +27,7 @@ import javax.servlet.ServletRequest;
 @RequestMapping("admin/system/dept")
 public class DeptController extends BaseController {
     @GetMapping("list")
-    @SysLog("跳转班级列表页面")
+    @SysLog("跳转学院列表页面")
     public String list(){
         return "admin/system/dept/list";
     }
@@ -54,53 +54,38 @@ public class DeptController extends BaseController {
     @GetMapping("add")
     @SysLog("跳转班级添加页面")
     public String add(){
-        return "admin/system/clazz/add";
+        return "admin/system/dept/add";
     }
 
-    @GetMapping("queryDept")
-    @ResponseBody
-    public HashMap queryDepartments(){
-        HashMap result = new HashMap();
-        List<Dept> deptList = deptService.selectAll();
-        result.put("code",0);
-        result.put("msg","");
-        result.put("count",deptList.size());
-        result.put("data",deptList);
-        return result;
-    }
     @PostMapping("add")
     @ResponseBody
     @SysLog("保存新增班级数据")
-    public RestResponse add(@RequestBody  Clazz clazz){
-        if(StringUtils.isBlank(clazz.getName())){
+    public RestResponse add(@RequestBody  Dept dept){
+        if(StringUtils.isBlank(dept.getName())){
             return RestResponse.failure("班级名不能为空");
         }
-        if(clazz.getDepts() == null || clazz.getDepts() .size()==1){
-            return  RestResponse.failure("请选择学院");
-        }
-
-        clazzService.saveClazz(clazz);
-        if(clazz.getId() == null || clazz.getId() == 0){
+        deptService.saveDept(dept);
+        if(dept.getId() == null || dept.getId() == 0){
             return RestResponse.failure("保存班级信息出错");
         }
         return RestResponse.success();
     }
     @GetMapping("edit")
     public String edit(int id, Model model){
-        Clazz clazz =clazzService.findClazzById(id);
-        model.addAttribute("clazz",clazz);
-        System.out.println(clazz.getName()+clazz.getCode());
-        return "admin/system/clazz/edit";
+        Dept dept =deptService.findDeptById(id);
+        model.addAttribute("dept",dept);
+        System.out.println(dept.getId());
+        return "admin/system/dept/edit";
     }
 
     @PostMapping("edit")
     @ResponseBody
     @SysLog("保存班级编辑数据")
-    public RestResponse edit(@RequestBody  Clazz clazz){
-        if(clazz.getId() == 0 || clazz.getId() == null){
+    public RestResponse edit(@RequestBody  Dept dept){
+        if(dept.getId() == 0 || dept.getId() == null){
             return RestResponse.failure("班级ID不能为空");
         }
-        clazzService.updataClazzById(clazz);
+        deptService.updataDeptById(dept);
         return RestResponse.success();
     }
     @PostMapping("delete")
@@ -110,11 +95,11 @@ public class DeptController extends BaseController {
         if(id<=0){
             return RestResponse.failure("参数错误");
         }
-        Clazz clazz = null;
-        if(clazz == null){
-            return RestResponse.failure("对战不存在");
+        Dept dept = deptService.findDeptById(id);
+        if(dept == null){
+            return RestResponse.failure("学院不存在");
         }
-//		clazzService;
+		deptService.deleteDeptById(id);
         return RestResponse.success();
     }
 		 

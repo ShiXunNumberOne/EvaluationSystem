@@ -16,7 +16,7 @@ public class Dept {
 
 	@TableField(exist = false)
 	private List<User> user;
-	
+
 	public List<User> getUser() {
 		return user;
 	}
