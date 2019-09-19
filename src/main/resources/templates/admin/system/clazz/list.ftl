@@ -83,7 +83,6 @@
             ]]
         };
         table.render(t);
-        console.log(t.data);
 
         //监听工具条
         table.on('tool(demo)', function(obj){
@@ -92,10 +91,10 @@
                 var editIndex = layer.open({
                     title : "编辑用户",
                     type : 2,
-                    content : "${base}/admin/system/user/edit?id="+data.id,
+                    content : "${base}/admin/system/clazz/edit?id="+data.id,
                     success : function(layero, index){
                         setTimeout(function(){
-                            layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
+                            layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
                                 tips: 3
                             });
                         },500);
@@ -110,7 +109,7 @@
             if(obj.event === "del"){
                 layer.confirm("你确定要删除该用户么？",{btn:['是的,我确定','我再想想']},
                     function(){
-                        $.post("${base}/admin/system/user/delete",{"id":data.id},function (res){
+                        $.post("${base}/admin/system/clazz/delete",{"id":data.id},function (res){
                            if(res.success){
                                layer.msg("删除成功",{time: 1000},function(){
                                    table.reload('test', t);
@@ -127,11 +126,11 @@
 
         //功能按钮
         var active={
-            addUser : function(){
+            addClazz : function(){
                 var addIndex = layer.open({
                     title : "添加会员",
                     type : 2,
-                    content : "${base}/admin/system/user/add",
+                    content : "${base}/admin/system/clazz/add",
                     success : function(layero, addIndex){
                         setTimeout(function(){
                             layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {

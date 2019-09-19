@@ -1,20 +1,27 @@
 package com.mysiteforme.admin.controller.system;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
 import com.mysiteforme.admin.entity.Clazz;
 import com.mysiteforme.admin.entity.Dept;
+import com.mysiteforme.admin.entity.Role;
 import com.mysiteforme.admin.entity.User;
 import com.mysiteforme.admin.util.LayerData;
+import com.mysiteforme.admin.util.RestResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
@@ -42,7 +49,7 @@ public class ClazzController extends BaseController {
 		if(!map.isEmpty()){
 			String keys = (String) map.get("key");
 			if(StringUtils.isNotBlank(keys)) {
-				clazzEntityWrapper.like("login_name", keys).or().like("tel", keys).or().like("email", keys);
+				clazzEntityWrapper.like("name", keys).or().like("code", keys).or().like("dept_id", keys);
 			}
 		}
 		Page<Clazz> clazzPage = clazzService.selectPage(new Page<>(page,limit),clazzEntityWrapper);
@@ -62,103 +69,70 @@ public class ClazzController extends BaseController {
         }
         return clazzs;
     }
+    @GetMapping("add")
+    @SysLog("跳转班级添加页面")
+    public String add(){
+        return "admin/system/clazz/add";
+    }
 
-//	@GetMapping("add")
-//	public String add(Model model){
-//		Map<String,Object> map = Maps.newHashMap();
-//		map.put("parentId",null);
-//		map.put("isShow",false);
-//		List<Menu> menuList = menuService.selectAllMenus(map);
-//		model.addAttribute("menuList",menuList);
-//		return "admin/system/role/add";
-//	}
-//
-//	@RequiresPermissions("sys:role:add")
-//	@PostMapping("add")
-//	@ResponseBody
-//	@SysLog("保存新增角色数据")
-//	public RestResponse add(@RequestBody Role role){
-//		if(StringUtils.isBlank(role.getName())){
-//			return RestResponse.failure("角色名称不能为空");
-//		}
-//		if(roleService.getRoleNameCount(role.getName())>0){
-//			return RestResponse.failure("角色名称已存在");
-//		}
-//		roleService.saveRole(role);
-//		return RestResponse.success();
-//	}
-//
-//	@GetMapping("edit")
-//	public String edit(Long id,Model model){
-//		Role role = roleService.getRoleById(id);
-//		//StringBuilder menuIds = new StringBuilder();
-//		List<Long> menuIds = Lists.newArrayList();
-//		if(role != null) {
-//			Set<Menu> menuSet = role.getMenuSet();
-//			if (menuSet != null && menuSet.size() > 0) {
-//				for (Menu m : menuSet) {
-//					//menuIds.append(m.getId().toString()).append(",");
-//					menuIds.add(m.getId());
-//				}
-//			}
-//		}
-//		Map<String,Object> map = Maps.newHashMap();
-//		map.put("parentId",null);
-//		map.put("isShow",false);
-//		List<Menu> menuList = menuService.selectAllMenus(map);
-//		model.addAttribute("role",role);
-//		model.addAttribute("menuList",menuList);
-//		model.addAttribute("menuIds",menuIds);
-//		return "admin/system/role/edit";
-//	}
-//
-//	@RequiresPermissions("sys:role:edit")
-//	@PostMapping("edit")
-//	@ResponseBody
-//	@SysLog("保存编辑角色数据")
-//	public RestResponse edit(@RequestBody Role role){
-//		if(role.getId() == null || role.getId() == 0){
-//			return RestResponse.failure("角色ID不能为空");
-//		}
-//		if(StringUtils.isBlank(role.getName())){
-//			return RestResponse.failure("角色名称不能为空");
-//		}
-//		Role oldRole = roleService.getRoleById(role.getId());
-//		if(!oldRole.getName().equals(role.getName())){
-//			if(roleService.getRoleNameCount(role.getName())>0){
-//				return RestResponse.failure("角色名称已存在");
-//			}
-//		}
-//		roleService.updateRole(role);
-//		return RestResponse.success();
-//	}
-//
-//	@RequiresPermissions("sys:role:delete")
-//	@PostMapping("delete")
-//	@ResponseBody
-//	@SysLog("删除角色数据")
-//	public RestResponse delete(@RequestParam(value = "id",required = false)Long id){
-//		if(id == null || id == 0){
-//			return RestResponse.failure("角色ID不能为空");
-//		}
-//		Role role = roleService.getRoleById(id);
-//		roleService.deleteRole(role);
-//		return RestResponse.success();
-//	}
-//
-//	@RequiresPermissions("sys:role:delete")
-//	@PostMapping("deleteSome")
-//	@ResponseBody
-//	@SysLog("多选删除角色数据")
-//	public RestResponse deleteSome(@RequestBody List<Role> roles){
-//		if(roles == null || roles.size()==0){
-//			return RestResponse.failure("请选择需要删除的角色");
-//		}
-//		for (Role r : roles){
-//			roleService.deleteRole(r);
-//		}
-//		return RestResponse.success();
-//	}
-//
+	@GetMapping("queryDept")
+    @ResponseBody
+	public HashMap  queryDepartments(){
+        HashMap result = new HashMap();
+		List<Dept> deptList = deptService.selectAll();
+        result.put("code",0);
+        result.put("msg","");
+        result.put("count",deptList.size());
+        result.put("data",deptList);
+		return result;
+	}
+	@PostMapping("add")
+	@ResponseBody
+	@SysLog("保存新增班级数据")
+	public RestResponse add(@RequestBody  Clazz clazz){
+		if(StringUtils.isBlank(clazz.getName())){
+			return RestResponse.failure("班级名不能为空");
+		}
+		if(clazz.getDepts() == null || clazz.getDepts() .size()==1){
+			return  RestResponse.failure("请选择学院");
+		}
 
+		clazzService.saveClazz(clazz);
+		if(clazz.getId() == null || clazz.getId() == 0){
+			return RestResponse.failure("保存班级信息出错");
+		}
+		return RestResponse.success();
+	}
+	@GetMapping("edit")
+	public String edit(int id, Model model){
+		Clazz clazz =clazzService.findClazzById(id);
+		model.addAttribute("clazz",clazz);
+		System.out.println(clazz.getName()+clazz.getCode());
+		return "admin/system/clazz/edit";
+	}
+
+	@PostMapping("edit")
+	@ResponseBody
+	@SysLog("保存班级编辑数据")
+	public RestResponse edit(@RequestBody  Clazz clazz){
+		if(clazz.getId() == 0 || clazz.getId() == null){
+			return RestResponse.failure("班级ID不能为空");
+		}
+		clazzService.updataClazzById(clazz);
+		return RestResponse.success();
+	}
+	@PostMapping("delete")
+	@ResponseBody
+	@SysLog("删除对战数据(单个)")
+	public RestResponse delete(@RequestParam(value = "id",required = false)int id){
+		if(id<=0){
+			return RestResponse.failure("参数错误");
+		}
+		Clazz clazz =clazzService.findClazzById(id) ;
+		if(clazz == null){
+			return RestResponse.failure("班级不存在");
+		}
+		clazzService.deleteClazzById(id);
+		return RestResponse.success();
+	}
 }

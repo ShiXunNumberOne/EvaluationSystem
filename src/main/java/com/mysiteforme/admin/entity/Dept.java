@@ -59,6 +59,5 @@ public class Dept {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	
-	
+
 }

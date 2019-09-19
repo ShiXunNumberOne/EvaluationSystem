@@ -89,7 +89,7 @@
                 var editIndex = layer.open({
                     title : "编辑用户",
                     type : 2,
-                    content : "${base}/admin/system/user/edit?id="+data.id,
+                    content : "${base}/admin/system/dept/edit?id="+data.id,
                     success : function(layero, index){
                         setTimeout(function(){
                             layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
@@ -107,7 +107,7 @@
             if(obj.event === "del"){
                 layer.confirm("你确定要删除该用户么？",{btn:['是的,我确定','我再想想']},
                     function(){
-                        $.post("${base}/admin/system/user/delete",{"id":data.id},function (res){
+                        $.post("${base}/admin/system/dept/delete",{"id":data.id},function (res){
                            if(res.success){
                                layer.msg("删除成功",{time: 1000},function(){
                                    table.reload('test', t);

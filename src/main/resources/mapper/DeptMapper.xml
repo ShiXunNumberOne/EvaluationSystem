@@ -3,67 +3,20 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mysiteforme.admin.dao.DeptDao">
+	<resultMap type="com.mysiteforme.admin.entity.Dept" id="DeptMap">
+		<id property="id" column="id"/>
+	</resultMap>
+	<select id="selectDeptByMap" resultMap="DeptMap"  parameterType="java.util.Map">
+       select * from dept where id=#{id}
+    </select>
+	<update id="updataDeptById" parameterType="com.mysiteforme.admin.entity.Dept" >
+		update dept
+		<set>
 
-	<!--  查询所有组织 -->
-	<select id="getDepts"  resultType="com.mysiteforme.admin.entity.Dept" >
-		select * from dept
-	</select>
-	
-	<!--查询所有系部  -->
-	<select id="getLastDepts"  resultType="com.mysiteforme.admin.entity.Dept" >
-		select * from dept where pid>1 and status = 1
-	</select>
-	
-	<!--查询所有二级学院  -->
-	<select id="getSecondDepts"  resultType="com.mysiteforme.admin.entity.Dept" >
-		select * from dept where pid=1 and status = 1
-	</select>
-	
-	<!-- 根据部门id查询所属组织 -->
-	<select id="getDeptById" parameterType="int" resultType="com.mysiteforme.admin.entity.Dept">
-	select * from dept where id = #{id}
-	render() {
-  const isLoggedIn = this.state.isLoggedIn;
-
-	</select>
-
-	<!--新增组织 -->
-    <insert id="insertDept" parameterType="com.mysiteforme.admin.entity.Dept" >
-      insert into dept(name,sort_code,pid,status) 
-      values(#{name},#{sort_code},#{pid},#{status})
-    </insert>
-    <!-- 修改组织 -->
-    <update id="updateDept" parameterType="com.mysiteforme.admin.entity.Dept">
-   update dept
-  		 <set>
-  		 	<if test="name!=null and name!=''">
-  		 		name=#{name},
-  		 	</if>
-  		 	<if test="sort_code!=null and sort_code!=''">
-  		 		sort_code=#{sort_code},
-  		 	</if>
-  		 	<if test="pid!=null and pid!=''">
-  		 		pid=#{pid},
-  		 	</if>
-  		 </set> 
-  		 where id=#{id}
-	  </update>
-	  
-	  
-	  <!-- 禁用组织 -->
-	  <update id="deleteDept" parameterType="int">
-	  	update dept set status =0 where id=#{id}
-	  </update>
-	  
-	  <!-- 恢复组织 -->
-	  <update id="recoverDept" parameterType="int">
-	  	update dept set status =1 where id=#{id}
-	  </update>
-	  
-    
-     <!-- 根据父id查询所有子机构 -->
-	  <select id="selDeptByPid" resultType="com.mysiteforme.admin.entity.Dept" parameterType="int">
-	  	select * from dept where pid=#{pid} 
-	  </select>
-    
+		</set>
+		where id=#{id}
+	</update>
+	<update id="deleteDeptById" parameterType="java.util.Map">
+        update  dept set status=0 where id=#{id}
+    </update>
     </mapper>

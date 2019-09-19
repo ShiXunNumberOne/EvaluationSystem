@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 @TableName("clazz")
-public class Clazz implements Serializable {
+public class Clazz {
 	private Integer id;
 	private String name;
 	private String code;
@@ -28,6 +28,14 @@ public class Clazz implements Serializable {
 	private List<User> user;
 
 
+	public List<Dept> getDepts() {
+		return depts;
+	}
+
+	public void setDepts(List<Dept> depts) {
+		this.depts = depts;
+	}
+
 	public Dept getDept() {
 		return dept;
 	}
@@ -35,6 +43,11 @@ public class Clazz implements Serializable {
 	public void setDept(Dept dept) {
 		this.dept = dept;
 	}
+
+	@TableField(exist = false)
+	private List<Dept> depts;
+
+
 
 	@TableField(exist = false)
 	private Dept dept;
