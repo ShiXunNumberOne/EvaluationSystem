@@ -1,5 +1,6 @@
 package com.mysiteforme.admin.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +27,13 @@ public class ClazzServiceImpl  extends ServiceImpl<ClazzDao, Clazz> implements C
 	public Clazz findClazzById(int id) {
 		Map<String,Object> map = Maps.newHashMap();
 		map.put("id", id);
-		Clazz c= baseMapper.selectClazzByMap(map);
+		Clazz c = baseMapper.selectClazzByMap(map);
 		return c;
+	}
+
+	@Override
+	public List<HashMap> findClazzByDeptId(int dept_id) {
+		return baseMapper.findClazzByDept(dept_id);
 	}
 
 	@Override

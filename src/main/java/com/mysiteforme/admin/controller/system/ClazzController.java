@@ -86,6 +86,17 @@ public class ClazzController extends BaseController {
         result.put("data",deptList);
 		return result;
 	}
+	@GetMapping("queryClazz")
+	@ResponseBody
+	public HashMap  queryClazzs(int dept_id){
+		HashMap result = new HashMap();
+		List<HashMap> clazzList = clazzService.findClazzByDeptId(dept_id);
+		result.put("code",0);
+		result.put("msg","");
+		result.put("count",clazzList.size());
+		result.put("data",clazzList);
+		return result;
+	}
 	@PostMapping("add")
 	@ResponseBody
 	@SysLog("保存新增班级数据")
@@ -123,7 +134,7 @@ public class ClazzController extends BaseController {
 	}
 	@PostMapping("delete")
 	@ResponseBody
-	@SysLog("删除对战数据(单个)")
+	@SysLog("删除班级数据(单个)")
 	public RestResponse delete(@RequestParam(value = "id",required = false)int id){
 		if(id<=0){
 			return RestResponse.failure("参数错误");

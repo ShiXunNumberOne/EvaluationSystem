@@ -21,6 +21,10 @@
        select * from clazz where id=#{id}
     </select>
 
+	<select id="findClazzByDept" resultMap="ClazzMap"  parameterType="java.util.Map">
+       select * from clazz where dept_id=#{dept_id}
+    </select>
+
 	<update id="updataClazzById" parameterType="com.mysiteforme.admin.entity.Clazz" >
 		update clazz
 		<set>

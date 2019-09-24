@@ -74,7 +74,9 @@
             and u.id = #{id}
         </if>
     </select>
-
+    <select id="findUserByDept" resultMap="UserMap"  parameterType="java.util.Map">
+       select * from sys_user u left join sys_user_role ur on(u.id=ur.user_id)left join sys_role r on(ur.role_id=r.id) where r.id=2 and u.dept_id=#{dept_id}
+    </select>
     <select id="saveUserRoles">
         insert into sys_user_role(user_id,role_id)
         values

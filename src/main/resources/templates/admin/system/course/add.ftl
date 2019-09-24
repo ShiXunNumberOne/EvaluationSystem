@@ -92,11 +92,6 @@
             var loadIndex = layer.load(2, {
                 shade: [0.3, '#333']
             });
-            var selectMatch= [];
-            $('input[name="dept_id"]:checked').each(function(){
-                selectMatch.push({"id":$(this).val()});
-            });
-            data.field.depts= selectMatch;
             //判断用户是否启用
             if(undefined !== data.field.status && null != data.field.status){
                 data.field.status = 0;

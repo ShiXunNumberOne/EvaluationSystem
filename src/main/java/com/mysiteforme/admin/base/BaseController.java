@@ -70,4 +70,7 @@ public class BaseController {
 
 	@Autowired
 	protected  DeptService deptService;
+
+	@Autowired
+	protected  SchedulesService  schedulesService;
 }

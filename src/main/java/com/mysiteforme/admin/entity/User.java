@@ -32,7 +32,7 @@ public class User extends DataEntity<User> {
 	@TableField("login_name")
 	private String loginName;
     /**
-     * 昵称
+     * 姓名
      */
 	@TableField(value = "nick_name",strategy= FieldStrategy.IGNORED)
 	private String nickName;
@@ -59,15 +59,51 @@ public class User extends DataEntity<User> {
 	 * 账户是否锁定
 	 */
 	private Boolean locked;
-
+    private Integer dept_id;
+    private Integer clazz_id;
 	@TableField(strategy= FieldStrategy.IGNORED)
 	private String icon;
 
 	@TableField(exist=false)
 	private Set<Role> roleLists = Sets.newHashSet();
-	
+	@TableField(exist=false)
+	private Set<Clazz> clazzs = Sets.newHashSet();
+	@TableField(exist=false)
+	private Set<Dept> depts = Sets.newHashSet();
 	@TableField(exist=false)
 	private Set<Menu> menus = Sets.newHashSet();
+
+	public Integer getDept_id() {
+		return dept_id;
+	}
+
+	public void setDept_id(Integer dept_id) {
+		this.dept_id = dept_id;
+	}
+
+	public Integer getClazz_id() {
+		return clazz_id;
+	}
+
+	public void setClazz_id(Integer clazz_id) {
+		this.clazz_id = clazz_id;
+	}
+
+	public Set<Clazz> getClazzs() {
+		return clazzs;
+	}
+
+	public void setClazzs(Set<Clazz> clazzs) {
+		this.clazzs = clazzs;
+	}
+
+	public Set<Dept> getDepts() {
+		return depts;
+	}
+
+	public void setDepts(Set<Dept> depts) {
+		this.depts = depts;
+	}
 
 	public String getLoginName() {
 		return loginName;

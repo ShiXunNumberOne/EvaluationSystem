@@ -3,9 +3,7 @@ package com.mysiteforme.admin.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @TableName("clazz")
 public class Clazz {

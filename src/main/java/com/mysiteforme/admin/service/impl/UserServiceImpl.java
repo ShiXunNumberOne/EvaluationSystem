@@ -15,6 +15,8 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -126,6 +128,11 @@ public class UserServiceImpl extends ServiceImpl<UserDao1, User> implements User
 	@Override
 	public Map selectUserMenuCount() {
 		return baseMapper.selectUserMenuCount();
+	}
+
+	@Override
+	public List<HashMap> findUserByDeptId(int dept_id) {
+		return baseMapper.findUserByDept(dept_id);
 	}
 
 }

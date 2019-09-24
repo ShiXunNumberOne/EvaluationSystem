@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.service.IService;
 import com.mysiteforme.admin.entity.Role;
 import com.mysiteforme.admin.entity.User;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,4 +37,6 @@ public interface UserService extends IService<User> {
 	void deleteUser(User user);
 
 	Map selectUserMenuCount();
+
+	List<HashMap> findUserByDeptId(int dept_id);
 }
