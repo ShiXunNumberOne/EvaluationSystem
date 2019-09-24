@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>班级添加--${site.name}</title>
+    <title>课程添加--${site.name}</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -34,21 +34,21 @@
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
     <div class="layui-form-item">
-        <label class="layui-form-label">班级名称</label>
+        <label class="layui-form-label">课程名称</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="请输入班级">
+            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="请输入课程">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">班级代码</label>
+            <label class="layui-form-label">课程代码</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="code" lay-verify="required" placeholder="请输入班级代码">
+                <input type="text" class="layui-input" name="code" lay-verify="required" placeholder="请输入课程代码">
             </div>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">班级-学院</label>
+        <label class="layui-form-label">课程-学院</label>
         <div class="layui-input-block">
             <select name="dept_id" id="dept" lay-verify="required" lay-search>
                 <option value="">请选择学院</option>
@@ -63,7 +63,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="addClazz">立即提交</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addCourse">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
@@ -76,7 +76,7 @@
             layer = layui.layer;
             status = 1;    //默认启用用户
         $.ajax({
-            url: '${base}/admin/system/clazz/queryDept',
+            url: '${base}/admin/system/course/queryDept',
             dataType: 'json',
             type: 'get',
             success: function (data) {
@@ -88,7 +88,7 @@
         })
         form.on('select', function(data){
         });
-        form.on("submit(addClazz)",function(data){
+        form.on("submit(addCourse)",function(data){
             var loadIndex = layer.load(2, {
                 shade: [0.3, '#333']
             });
@@ -105,14 +105,14 @@
             }
             $.ajax({
                 type:"POST",
-                url:"${base}/admin/system/clazz/add",
+                url:"${base}/admin/system/course/add",
                 dataType:"json",
                 contentType:"application/json",
                 data:JSON.stringify(data.field),
                 success:function(res){
                     layer.close(loadIndex);
                     if(res.success){
-                        parent.layer.msg("班级添加成功!",{time:1500},function(){
+                        parent.layer.msg("课程添加成功!",{time:1500},function(){
                             //刷新父页面
                             parent.location.reload();
                         });
