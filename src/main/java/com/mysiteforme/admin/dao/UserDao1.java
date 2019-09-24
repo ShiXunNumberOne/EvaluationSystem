@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,7 +23,7 @@ import java.util.Set;
  */
 public interface UserDao1 extends BaseMapper<User> {
 	User selectUserByMap(Map<String, Object> map);
-
+	List<HashMap> findUserByDept(int dept_id);
 	void saveUserRoles(@Param("userId")Long id, @Param("roleIds")Set<Role> roles);
 
 	void dropUserRolesByUserId(@Param("userId")Long userId);

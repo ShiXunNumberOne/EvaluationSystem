@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysiteforme.admin.dao.SchedulesDao" >
+    <!-- 这儿定义一个resultMap -->
+    <resultMap id="schedulesMap" type="com.mysiteforme.admin.entity.VO.Schedules">
+        <id property="id" column="id"/>
+        <result property="address" column="address"/>
+        <result property="hour" column="hour"/>
+        <result property="credit" column="credit"/>
+        <result property="status" column="status"/>
+        <result property="courseId" column="course_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="clazzId" column="clazz_id"/>
+        <collection property="users"  ofType="com.mysiteforme.admin.entity.User">
+            <result property="id" column="id"/>
+            <result property="nickName" column="nick_name"/>
+        </collection>
+        <collection property="clazzs"  ofType="com.mysiteforme.admin.entity.Clazz">
+            <result property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="code" column="code"/>
+        </collection>
+        <collection property="courses"  ofType="com.mysiteforme.admin.entity.Course">
+            <result property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="code" column="code"/>
+        </collection>
+    </resultMap>
+    <select id="selectTeachOutMap" resultType="com.mysiteforme.admin.entity.VO.SchedulesVO" parameterType="java.util.Map">
+      select s.id ,	s.course_id,
+				s.clazz_id,cs.name as cname,cs.code as ccode,cz.name ,cz.code ,
+        u.nick_name as uname,s.address,s.hour,s.credit,s.status
+         from  schedules s  left join course cs on(s.course_id=cs.id)
+         left join clazz cz on(s.clazz_id=cz.id) left join sys_user u on(s.teacher_id=u.id)
+    </select>
+    <select id="selectSchedulesByMap" resultMap="schedulesMap"  parameterType="java.util.Map">
+       select * from schedules where id=#{id}
+    </select>
+    <update id="updataSchedulesById" parameterType="com.mysiteforme.admin.entity.VO.Schedules" >
+        update schedules
+        <set>
+            <if test="clazzId!=null">
+                clazz_id=#{clazzId},
+            </if>
+            <if test="courseId!=null">
+                course_id=#{courseId},
+            </if>
+            <if test="teacherId!=null">
+                teacher_id=#{teacherId},
+            </if>
+            <if test="address!=null">
+                address=#{address},
+            </if>
+            <if test="hour!=null">
+                hour=#{hour},
+            </if>
+            <if test="credit!=null">
+                credit=#{credit},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteSchedulesById" parameterType="java.util.Map">
+        delete from schedules where id=#{id}
+    </delete>
+</mapper>

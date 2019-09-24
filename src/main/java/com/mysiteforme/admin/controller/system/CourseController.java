@@ -62,6 +62,17 @@ public class CourseController extends BaseController {
 //        }
 //        return courses;
 //    }
+@GetMapping("queryCourse")
+@ResponseBody
+public HashMap  queryCourses(){
+    HashMap result = new HashMap();
+    List<Course> courseList = courseService.selectAll();
+    result.put("code",0);
+    result.put("msg","");
+    result.put("count",courseList.size());
+    result.put("data",courseList);
+    return result;
+}
     @GetMapping("add")
     @SysLog("跳转课程添加页面")
     public String add(){

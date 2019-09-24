@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
 import com.mysiteforme.admin.base.MySysUser;
+import com.mysiteforme.admin.entity.Dept;
 import com.mysiteforme.admin.entity.Role;
 import com.mysiteforme.admin.entity.User;
 import com.mysiteforme.admin.entity.VO.ShowMenu;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +64,17 @@ public class UserConteroller extends BaseController{
         userLayerData.setData(userPage.getRecords());
         return  userLayerData;
     }
-
+    @GetMapping("queryUser")
+    @ResponseBody
+    public HashMap queryUsers(int dept_id){
+        HashMap result = new HashMap();
+        List<HashMap> userList = userService.findUserByDeptId(dept_id);
+        result.put("code",0);
+        result.put("msg","");
+        result.put("count",userList.size());
+        result.put("data",userList);
+        return result;
+    }
     @GetMapping("add")
     public String add(Model model){
         List<Role> roleList = roleService.selectAll();
