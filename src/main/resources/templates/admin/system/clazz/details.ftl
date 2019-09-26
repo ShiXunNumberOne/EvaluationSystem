@@ -49,6 +49,7 @@
     <!--<button class="layui-btn" data-type="getCheckLength">获取选中数目</button>-->
     <!--<button class="layui-btn" data-type="isAll">验证是否全选</button>-->
     <!--</div>-->
+
     <script type="text/html" id="userGender">
         <!-- 这里的 checked 的状态只是演示 -->
         {{#  if(d.gender == 0){ }}
@@ -63,12 +64,18 @@
             <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
             <th lay-data="{field:'login_name',  width:350,sort: true, fixed: true}">学号</th>
             <th lay-data="{field:'nick_name',width:350,fixed: true}">姓名</th>
+            <#--<th lay-data="{field:'user_sex',fixed: true}">性别</th>-->
             <th lay-data="{field:'gender',fixed: true,templet:'#userGender'}">性别</th>
             <th lay-data="{fixed: 'right', width:172, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
     </table>
 
+    <!--<script type="text/html" id="barDemo">-->
+    <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+    <!--</script>-->
     <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
