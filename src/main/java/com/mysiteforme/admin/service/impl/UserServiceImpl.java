@@ -131,6 +131,11 @@ public class UserServiceImpl extends ServiceImpl<UserDao1, User> implements User
 	}
 
 	@Override
+	public List<HashMap> selectUserinClazz(String clazz_id) {
+		return baseMapper.selectUserinClazz(clazz_id);
+	}
+
+	@Override
 	public List<HashMap> findUserByDeptId(int dept_id) {
 		return baseMapper.findUserByDept(dept_id);
 	}

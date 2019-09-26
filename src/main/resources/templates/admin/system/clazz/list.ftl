@@ -45,6 +45,7 @@
         {{#  } }}
     </script>
     <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="details">详情</a>
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
@@ -53,7 +54,15 @@
 <script type="text/javascript" src="${base}/static/layui/layui.js"></script>
 <script type="text/javascript" src="${base}/static/js/tools.js"></script>
 <script>
+
+    var a=1
+    var clazz_name
+    var clazz_code
+    var dept_name
     layui.use(['layer','form','table'], function() {
+
+
+
         var layer = layui.layer,
                 $ = layui.jquery,
                 form = layui.form,
@@ -101,6 +110,39 @@
                     }
                 });
                 //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                $(window).resize(function(){
+                    layer.full(editIndex);
+                });
+                layer.full(editIndex);
+            }
+            if(obj.event === 'details'){
+
+
+                clazz_name=data.name
+                clazz_code=data.code
+                dept_name=data.dept.name
+                console.log("班级名称:"+clazz_name)
+                console.log("班级编号:"+clazz_code)
+                console.log("所属院系:"+dept_name)
+
+                var editIndex = layer.open({
+                    title : "详情",
+                    type : 2,
+                    content : "${base}/admin/system/clazz/details?clazz_id="+data.id,
+                    success : function(layero, index){
+                        setTimeout(function(){
+                            layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {
+                                tips: 3
+                            });
+                        },500);
+                        // var body = layer.getChildFrame('body', index);
+                        // var iframe = window['layui-layer-iframe' + index];
+                        // // 向子页面的全局函数
+                        // iframe.inputDataHandle(obj);
+                        var clazz_name=data.name
+                    }
+                });
+                // 改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
                 $(window).resize(function(){
                     layer.full(editIndex);
                 });
