@@ -9,14 +9,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <result property="code" column="code"/>
     <result property="status" column="status"/>
     <result property="note" column="note"/>
-    <collection property="user"  ofType="com.mysiteforme.admin.entity.User">
-        <result property="id" column="id"/>
-        <result property="nickName" column="nick_name"/>
-    </collection>
-    <collection property="depts"  ofType="com.mysiteforme.admin.entity.Dept">
-        <result property="id" column="id"/>
-        <result property="name" column="name"/>
-    </collection>
 </resultMap>
 <select id="selectCourseByMap" resultMap="CourseMap"  parameterType="java.util.Map">
        select * from course where id=#{id}

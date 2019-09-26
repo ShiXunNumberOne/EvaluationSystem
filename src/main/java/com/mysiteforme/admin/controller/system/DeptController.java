@@ -43,7 +43,7 @@ public class DeptController extends BaseController {
         if(!map.isEmpty()){
             String keys = (String) map.get("key");
             if(StringUtils.isNotBlank(keys)) {
-                clazzEntityWrapper.like("login_name", keys).or().like("tel", keys).or().like("email", keys);
+                clazzEntityWrapper.like("name", keys);
             }
         }
         Page<Dept> clazzPage = deptService.selectPage(new Page<>(page,limit),clazzEntityWrapper);

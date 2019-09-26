@@ -48,11 +48,11 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">课程-学院</label>
-        <div class="layui-input-block">
-            <select name="dept_id" id="dept" lay-verify="required" lay-search>
-                <option value="">请选择学院</option>
-            </select>
+        <div class="layui-inline">
+            <label class="layui-form-label">课程备注</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="note" lay-verify="text" placeholder="可有可无的备注">
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
@@ -75,19 +75,7 @@
             $    = layui.jquery,
             layer = layui.layer;
             status = 1;    //默认启用用户
-        $.ajax({
-            url: '${base}/admin/system/course/queryDept',
-            dataType: 'json',
-            type: 'get',
-            success: function (data) {
-                $.each(data.data, function (index,item) {
-                    $('#dept').append(new Option(item.name,item.id));// 下拉菜单里添加元素
-                });
-                layui.form.render("select");
-            }
-        })
-        form.on('select', function(data){
-        });
+
         form.on("submit(addCourse)",function(data){
             var loadIndex = layer.load(2, {
                 shade: [0.3, '#333']
@@ -110,6 +98,7 @@
                         parent.layer.msg("课程添加成功!",{time:1500},function(){
                             //刷新父页面
                             parent.location.reload();
+                            var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
                         });
                     }else{
                         layer.msg(res.message);

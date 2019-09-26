@@ -73,12 +73,6 @@ public HashMap  queryCourses(){
     result.put("data",courseList);
     return result;
 }
-    @GetMapping("add")
-    @SysLog("跳转课程添加页面")
-    public String add(){
-        return "admin/system/course/add";
-    }
-
     @GetMapping("queryDept")
     @ResponseBody
     public HashMap queryDepartments(){
@@ -90,6 +84,13 @@ public HashMap  queryCourses(){
         result.put("data",deptList);
         return result;
     }
+
+    @GetMapping("add")
+    @SysLog("跳转课程添加页面")
+    public String add(){
+        return "admin/system/course/add";
+    }
+
     @PostMapping("add")
     @ResponseBody
     @SysLog("保存新增课程数据")
@@ -97,10 +98,6 @@ public HashMap  queryCourses(){
         if(StringUtils.isBlank(course.getName())){
             return RestResponse.failure("课程名不能为空");
         }
-//        if(course.getDepts() == null || course.getDepts() .size()==1){
-//            return  RestResponse.failure("请选择学院");
-//        }
-
         courseService.saveCourse(course);
         if(course.getId() == null || course.getId() == 0){
             return RestResponse.failure("保存课程信息出错");

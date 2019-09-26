@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>班级列表--${site.name}</title>
+    <title>批次列表--${site.name}</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -14,18 +14,19 @@
     <link rel="stylesheet" href="${base}/static/css/user.css" media="all" />
 </head>
 <body class="childrenBody">
+
 <fieldset class="layui-elem-field">
-    <legend>班级检索</legend>
+    <legend>批次检索</legend>
     <div class="layui-field-box">
     <form class="layui-form">
         <div class="layui-inline" style="width: 15%">
-            <input type="text" value="" name="s_key" placeholder="可以输入学院名" class="layui-input search_input">
+            <input type="text" value="" name="s_key" placeholder="可以输入批次名" class="layui-input search_input">
         </div>
         <div class="layui-inline">
             <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
         </div>
         <div class="layui-inline">
-            <a class="layui-btn layui-btn-normal" data-type="addDept">添加学院</a>
+            <a class="layui-btn layui-btn-normal" data-type="addEtask">添加批次</a>
         </div>
         <div class="layui-inline">
             <a class="layui-btn layui-btn-danger" data-type="deleteSome">批量删除</a>
@@ -36,12 +37,12 @@
 <div class="layui-form users_list">
     <table class="layui-table" id="test" lay-filter="demo"></table>
 
-    <script type="text/html" id="clazzStatus">
+    <script type="text/html" id="etaskStatus">
         <!-- 这里的 checked 的状态只是演示 -->
-        {{#  if(d.status == false){ }}
-        <span class="layui-badge layui-bg-green">正常</span>
+        {{#  if(d.status == 1){ }}
+        <span class="layui-badge layui-bg-green">正在评教</span>
         {{#  } else { }}
-        <span class="layui-badge layui-bg-gray">停用</span>
+        <span class="layui-badge layui-bg-gray">未开启</span>
         {{#  } }}
     </script>
     <script type="text/html" id="barDemo">
@@ -62,7 +63,7 @@
 
         t = {
             elem: '#test',
-            url:'${base}/admin/system/dept/list',
+            url:'${base}/admin/system/etask/list',
             method:'post',
             page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                 layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'], //自定义分页布局
@@ -75,8 +76,11 @@
             width: $(parent.window).width()-223,
             cols: [[
                 {type:'checkbox'},
-                {field:'id', title: 'ID'},
-                {field:'name', title: '名称'},
+                {field:'name', title: '批次名称'},
+                {field:'start_data', title: '开始时间',templet:'<div>{{ layui.laytpl.toDateString(d.startData) }}</div>',unresize: true},
+                {field:'end_data', title: '结束时间',templet:'<div>{{ layui.laytpl.toDateString(d.endData) }}</div>',unresize: true},
+                {field:'status', title: '评教状态',templet:'#etaskStatus'},
+                {field:'nickName',  title: '创建者',templet:'<div>{{  d.user.nickName }}</div>'},
                 {fixed: 'right',    width: '15%', align: 'center',toolbar: '#barDemo'}
             ]],
         };
@@ -87,12 +91,12 @@
             var data = obj.data;
             if(obj.event === 'edit'){
                 var editIndex = layer.open({
-                    title : "编辑用户",
+                    title : "编辑批次",
                     type : 2,
-                    content : "${base}/admin/system/dept/edit?id="+data.id,
+                    content : "${base}/admin/system/etask/edit?id="+data.id,
                     success : function(layero, index){
                         setTimeout(function(){
-                            layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
+                            layer.tips('点击此处返回批次列表', '.layui-layer-setwin .layui-layer-close', {
                                 tips: 3
                             });
                         },500);
@@ -105,9 +109,9 @@
                 layer.full(editIndex);
             }
             if(obj.event === "del"){
-                layer.confirm("你确定要删除该用户么？",{btn:['是的,我确定','我再想想']},
+                layer.confirm("你确定要删除该批次么？",{btn:['是的,我确定','我再想想']},
                     function(){
-                        $.post("${base}/admin/system/dept/delete",{"id":data.id},function (res){
+                        $.post("${base}/admin/system/etask/delete",{"id":data.id},function (res){
                            if(res.success){
                                layer.msg("删除成功",{time: 1000},function(){
                                    table.reload('test', t);
@@ -124,11 +128,11 @@
 
         //功能按钮
         var active={
-            addDept : function(){
+            addEtask : function(){
                 var addIndex = layer.open({
-                    title : "添加学院",
+                    title : "添加批次",
                     type : 2,
-                    content : "${base}/admin/system/dept/add",
+                    content : "${base}/admin/system/etask/add",
                     success : function(layero, addIndex){
                         setTimeout(function(){
                             layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
@@ -155,12 +159,12 @@
                             return false;
                         }
                     }
-                    layer.confirm("你确定要删除这些用户么？",{btn:['是的,我确定','我再想想']},
+                    layer.confirm("你确定要删除这些批次么？",{btn:['是的,我确定','我再想想']},
                         function(){
                             var deleteindex = layer.msg('删除中，请稍候',{icon: 16,time:false,shade:0.8});
                             $.ajax({
                                 type:"POST",
-                                url:"${base}/admin/system/dept/deleteSome",
+                                url:"${base}/admin/system/etask/deleteSome",
                                 dataType:"json",
                                 contentType:"application/json",
                                 data:JSON.stringify(data),
@@ -178,7 +182,7 @@
                         }
                     )
                 }else{
-                    layer.msg("请选择需要删除的用户",{time:1000});
+                    layer.msg("请选择需要删除的批次",{time:1000});
                 }
             }
         };

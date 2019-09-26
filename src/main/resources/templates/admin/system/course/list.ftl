@@ -25,7 +25,7 @@
             <a class="layui-btn" lay-submit="" lay-filter="searchForm">查询</a>
         </div>
         <div class="layui-inline">
-            <a class="layui-btn layui-btn-normal" data-type="addClazz">添加课程</a>
+            <a class="layui-btn layui-btn-normal" data-type="addCourse">添加课程</a>
         </div>
         <div class="layui-inline">
             <a class="layui-btn layui-btn-danger" data-type="deleteSome">批量删除</a>
@@ -36,7 +36,7 @@
 <div class="layui-form users_list">
     <table class="layui-table" id="test" lay-filter="demo"></table>
 
-    <script type="text/html" id="clazzStatus">
+    <script type="text/html" id="courseStatus">
         <!-- 这里的 checked 的状态只是演示 -->
         {{#  if(d.status == false){ }}
         <span class="layui-badge layui-bg-green">正常</span>
@@ -76,8 +76,9 @@
             cols: [[
                 {type:'checkbox'},
                 {field:'id', title: 'ID'},
-                {field:'name', title: '课程名称'},
+                {field:'name', title: '课程名称', width:'12%'},
                 {field:'code',  title: '课程代码',    width:'10%'},
+                {field:'note', title: '课程备注'},
                 {fixed: 'right',    width: '15%', align: 'center',toolbar: '#barDemo'}
             ]],
         };
@@ -125,7 +126,7 @@
 
         //功能按钮
         var active={
-            addUser : function(){
+            addCourse : function(){
                 var addIndex = layer.open({
                     title : "添加",
                     type : 2,

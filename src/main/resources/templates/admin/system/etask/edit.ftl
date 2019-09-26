@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>课程用户修改--${site.name}</title>
+    <title>批次管理修改--${site.name}</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -27,34 +27,34 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
-    <input class="layui-hide" name="id" value="${course.id}"/>
+    <input class="layui-hide" name="id" value="${etask.id}"/>
     <div class="layui-form-item">
-        <label class="layui-form-label">课程名称</label>
+        <label class="layui-form-label">批次名称</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="课程名称" value="${course.name}">
+            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="批次名称" value="${etask.name}">
         </div>
         <div class="layui-inline">
-            <label class="layui-form-label">课程代码</label>
+            <label class="layui-form-label">开始时间</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="code" lay-verify="required" placeholder="课程代码" value="${course.code}">
+                <input type="date" style="width: 58%" class="layui-input" name="startData" lay-verify="required" placeholder="开始时间" value="${etask.startData}">
             </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">课程备注</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" name="note" lay-verify="required" placeholder="课程备注" value="${course.note}">
+        <div class="layui-inline">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-block">
+                <input type="date" style="width:58%" class="layui-input" name="endData" lay-verify="required" placeholder="结束时间" value="${etask.endData}">
+            </div>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">是否启用</label>
         <div class="layui-input-block">
-            <input type="checkbox" name="status" lay-skin="switch" value="1"  lay-text="启用|停用" <#if (course.status  == 1)>checked=""</#if> >
+            <input type="checkbox" name="status" lay-skin="switch" value="1"  lay-text="启用|停用" <#if (etask.status  == 1)>checked=""</#if> >
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="addCourse">我要修改</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addEtask">我要修改</button>
             <button class="layui-btn"   class="layui-btn layui-btn-primary">我不改了</button>
         </div>
     </div>
@@ -66,11 +66,11 @@
         var form = layui.form,
                 $    = layui.jquery,
                 layer = layui.layer,
-                status = ${course.status};
+                status = ${etask.status};
 
-        form.on("submit(addCourse)",function(data){
+        form.on("submit(addEtask)",function(data){
             if(data.field.id == null){
-                layer.msg("课程ID不存在");
+                layer.msg("ID不存在");
                 return false;
             }
             //判断用户是否启用
@@ -84,14 +84,14 @@
             });
             $.ajax({
                 type:"POST",
-                url:"${base}/admin/system/course/edit",
+                url:"${base}/admin/system/etask/edit",
                 dataType:"json",
                 contentType:"application/json",
                 data:JSON.stringify(data.field),
                 success:function(res){
                     layer.close(loadIndex);
                     if(res.success){
-                        parent.layer.msg("课程编辑成功！",{time:1500},function(){
+                        parent.layer.msg("批次编辑成功！",{time:1500},function(){
                             parent.location.reload();
                         });
                     }else{

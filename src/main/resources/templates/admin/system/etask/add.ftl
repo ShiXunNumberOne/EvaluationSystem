@@ -2,13 +2,19 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>课程用户修改--${site.name}</title>
+    <title>批次添加--${site.name}</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
+    <!-- 页面描述 -->
+    <meta name="description" content="${site.description}"/>
+    <!-- 页面关键词 -->
+    <meta name="keywords" content="${site.keywords}"/>
+    <!-- 网页作者 -->
+    <meta name="author" content="${site.author}"/>
     <link rel="stylesheet" href="${base}/static/layui/css/layui.css" media="all" />
     <style type="text/css">
         .layui-form-item .layui-inline{ width:33.333%; float:left; margin-right:0; }
@@ -27,71 +33,77 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
-    <input class="layui-hide" name="id" value="${course.id}"/>
     <div class="layui-form-item">
-        <label class="layui-form-label">课程名称</label>
+        <label class="layui-form-label">批次名称</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="课程名称" value="${course.name}">
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">课程代码</label>
-            <div class="layui-input-block">
-                <input type="text" class="layui-input" name="code" lay-verify="required" placeholder="课程代码" value="${course.code}">
-            </div>
+            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="批次名称">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">课程备注</label>
+        <label class="layui-form-label">开始时间</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="note" lay-verify="required" placeholder="课程备注" value="${course.note}">
+            <input type="date" style="width: 18%" class="layui-input" name="start_data" lay-verify="required" placeholder="开始时间">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-block">
+            <input type="date" style="width: 18%" class="layui-input" name="end_data" lay-verify="required" placeholder="结束时间">
+        </div>
+    </div>
+    <div class="layui-form-item" style="display: none">
+        <label class="layui-form-label">创建人</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" name="createuserId" value="${uid}" lay-verify="required" placeholder="创建人">
+        </div>
+    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">是否启用</label>
         <div class="layui-input-block">
-            <input type="checkbox" name="status" lay-skin="switch" value="1"  lay-text="启用|停用" <#if (course.status  == 1)>checked=""</#if> >
+            <input type="checkbox" name="status" lay-skin="switch"  lay-filter="status"  lay-text="启用|停用" checked>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="addCourse">我要修改</button>
-            <button class="layui-btn"   class="layui-btn layui-btn-primary">我不改了</button>
+            <button class="layui-btn" lay-submit="" lay-filter="addEtask">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
 <script type="text/javascript" src="${base}/static/layui/layui.js"></script>
 <script>
-    var index = parent.layer.getFrameIndex(window.name); //当前窗口索引
     layui.use(['form','jquery','layer'],function(){
         var form = layui.form,
-                $    = layui.jquery,
-                layer = layui.layer,
-                status = ${course.status};
+            $    = layui.jquery,
+            layer = layui.layer;
+            status = 1;    //默认启用
 
-        form.on("submit(addCourse)",function(data){
-            if(data.field.id == null){
-                layer.msg("课程ID不存在");
-                return false;
-            }
-            //判断用户是否启用
-            if(undefined !== data.field.status && null != data.field.status){
-                data.field.status = 1;
-            }else{
-                data.field.status = 0;
-            }
+
+
+        form.on("submit(addEtask)",function(data){
+console.log(data.field)
+
             var loadIndex = layer.load(2, {
                 shade: [0.3, '#333']
             });
+            //判断用户是否启用
+            if(undefined !== data.field.status && null != data.field.status){
+                data.field.status = 0;
+            }else{
+                data.field.status = 1;
+            }
             $.ajax({
                 type:"POST",
-                url:"${base}/admin/system/course/edit",
+                url:"${base}/admin/system/etask/add",
                 dataType:"json",
                 contentType:"application/json",
                 data:JSON.stringify(data.field),
                 success:function(res){
                     layer.close(loadIndex);
                     if(res.success){
-                        parent.layer.msg("课程编辑成功！",{time:1500},function(){
+                        parent.layer.msg("批次添加成功!",{time:1500},function(){
+                            //刷新父页面
                             parent.location.reload();
                         });
                     }else{
@@ -101,8 +113,8 @@
             });
             return false;
         });
-
     });
+
 </script>
 </body>
 </html>
