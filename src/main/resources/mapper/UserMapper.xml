@@ -107,4 +107,8 @@
     <delete id="dropUserRolesByUserId" parameterType="java.lang.Long">
         delete from sys_user_role where user_id = #{userId}
     </delete>
+
+    <select id="selectUserinClazz" resultType="HashMap" parameterType="String">
+        select sys_user.login_name,sys_user.nick_name from sys_user where clazz_id=#{clazz_id}
+    </select>
 </mapper>
