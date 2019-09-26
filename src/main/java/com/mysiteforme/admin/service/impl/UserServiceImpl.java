@@ -1,6 +1,7 @@
 package com.mysiteforme.admin.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
 import com.mysiteforme.admin.dao.UserDao1;
@@ -131,8 +132,18 @@ public class UserServiceImpl extends ServiceImpl<UserDao1, User> implements User
 	}
 
 	@Override
+	public List<HashMap> selectUserinClazz(String clazz_id) {
+		return baseMapper.selectUserinClazz(clazz_id);
+	}
+
+	@Override
 	public List<HashMap> findUserByDeptId(int dept_id) {
 		return baseMapper.findUserByDept(dept_id);
 	}
+
+//	@Override
+//	public Page<User> queryMyUserOutMapByPage(Page<User> page, int clazz_id) {
+//		return page.setRecords(this.baseMapper.selectMyUserByClazz(page,clazz_id));
+//	}
 
 }

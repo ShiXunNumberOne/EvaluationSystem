@@ -23,9 +23,13 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -36,6 +40,38 @@ public class ClazzController extends BaseController {
 	@SysLog("跳转班级列表页面")
 	public String list(){
 		return "admin/system/clazz/list";
+	}
+
+	@GetMapping("details")
+	@SysLog("跳转班级详情页面")
+	public String details(String clazz_id){
+		ServletRequestAttributes servletReqAttr =
+				(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		HttpServletRequest request = servletReqAttr.getRequest();
+		HttpSession session = request.getSession();
+		session.setAttribute("clazzidDetails" ,clazz_id );
+		return "admin/system/clazz/details";
+	}
+
+
+	@GetMapping("classList")
+	@ResponseBody
+	public HashMap queryClassList(){
+		ServletRequestAttributes servletReqAttr =
+				(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		HttpServletRequest request = servletReqAttr.getRequest();
+		HttpSession session = request.getSession();
+		Object clazzId = session.getAttribute("clazzidDetails");
+		List<HashMap> clazzList = userService.selectUserinClazz(clazzId.toString());
+
+		HashMap map = new HashMap();
+		map.put("code",0000);
+		map.put("msg","Ok");
+		map.put("count",clazzList.size());
+		map.put("data",clazzList);
+
+		return  map;
+
 	}
 
 	@PostMapping("list")

@@ -55,6 +55,13 @@
         </div>
     </div>
     <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="gender" value="0" title="男" <#if (localuser.gender  == 0)>checked=""</#if>>
+            <input type="radio" name="gender" value="1" title="女"<#if (localuser.gender  == 1)>checked=""</#if>>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">用户角色</label>
         <div class="layui-input-block role-box">
             <div class="jq-role-inline">
@@ -111,45 +118,7 @@
                 $    = layui.jquery,
                 layer = layui.layer,
                 delFlage = ${localuser.delFlag?string};
-        $.ajax({
-            url: '${base}/admin/system/clazz/queryDept',
-            dataType: 'json',
-            type: 'get',
-            success: function (data) {
-                $.each(data.data, function (index,item) {
-                    $('#dept').append(new Option(item.name,item.id));// 下拉菜单里添加元素
-                });
-                layui.form.render("select");
-            }
-        });
-        //角色下拉框change事件，判断是否为学生显示班级
-        form.on('checkbox', function(data){
-            // console.log(data);
-            if(data.value==1 || data.value==2){
-                $('#changeClass').css("display","none")
-            }else{
-                $('#changeClass').css("display","block")
-            }
-        });
-        //选择院系，得到班级
-        form.on('select(dept)', function(data) {
-            // console.log(data.value)
-            $('#clazz').empty();
-            var dept_id = data.value
-            $.ajax({
-                url: '${base}/admin/system/clazz/queryClazz',
-                dataType: 'json',
-                type: 'get',
-                data: {dept_id:dept_id},
-                success: function (data) {
-                    $.each(data.data, function (index, item) {
 
-                        $('#clazz').append(new Option(item.name, item.id));// 下拉菜单里添加元素
-                    });
-                    layui.form.render("select");
-                }
-            })
-        });
         form.on("submit(addUser)",function(data){
             if(data.field.id == null){
                 layer.msg("用户ID不存在");

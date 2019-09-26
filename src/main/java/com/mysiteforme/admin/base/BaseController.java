@@ -73,6 +73,7 @@ public class BaseController {
 
 	@Autowired
 	protected  SchedulesService  schedulesService;
+
 	@Autowired
-	protected  EtaskService  etaskService;
+	protected  NormtargetService  normtargetService;
 }

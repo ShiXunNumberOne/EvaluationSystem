@@ -42,9 +42,9 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">学院ID</label>
+            <label class="layui-form-label">所属学院</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="dept_id" readonly="readonly" value="${clazz.deptId}">
+                <input type="text" class="layui-input" name="dept_id" readonly="readonly" value="${dept.name}">
             </div>
         </div>
     </div>

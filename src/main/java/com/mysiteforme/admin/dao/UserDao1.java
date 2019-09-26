@@ -2,6 +2,8 @@ package com.mysiteforme.admin.dao;
 
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.mysiteforme.admin.entity.Clazz;
 import com.mysiteforme.admin.entity.Role;
 import com.mysiteforme.admin.entity.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -24,8 +26,9 @@ import java.util.Set;
 public interface UserDao1 extends BaseMapper<User> {
 	User selectUserByMap(Map<String, Object> map);
 	List<HashMap> findUserByDept(int dept_id);
+	List<HashMap> selectUserinClazz(String clazz_id);
 	void saveUserRoles(@Param("userId")Long id, @Param("roleIds")Set<Role> roles);
-
+//	List<User> selectMyUserByClazz(Pagination page, int clazz_id);
 	void dropUserRolesByUserId(@Param("userId")Long userId);
 
 	Map selectUserMenuCount();

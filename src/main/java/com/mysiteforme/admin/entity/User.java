@@ -36,6 +36,11 @@ public class User extends DataEntity<User> {
      */
 	@TableField(value = "nick_name",strategy= FieldStrategy.IGNORED)
 	private String nickName;
+
+	/**
+	 * 性别
+	 */
+	private Integer gender;
     /**
      * 密码
      */
@@ -83,6 +88,14 @@ public class User extends DataEntity<User> {
 
 	public Integer getClazz_id() {
 		return clazz_id;
+	}
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
 	}
 
 	public void setClazz_id(Integer clazz_id) {

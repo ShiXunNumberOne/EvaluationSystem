@@ -44,6 +44,14 @@
         <span class="layui-badge layui-bg-gray">停用</span>
         {{#  } }}
     </script>
+    <script type="text/html" id="userGender">
+        <!-- 这里的 checked 的状态只是演示 -->
+        {{#  if(d.gender == 0){ }}
+        <span >男</span>
+        {{#  } else { }}
+        <span>女</span>
+        {{#  } }}
+    </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -77,6 +85,7 @@
                 {type:'checkbox'},
                 {field:'loginName', title: '登录名称'},
                 {field:'nickName',  title: '昵称',    width:'10%'},
+                {field:'gender',     title: '性别',    width:'10%',templet:'#userGender' },
                 {field:'email',     title: '邮箱',    width:'16%' },
                 {field:'tel',       title: '电话',    width:'12%'},
                 {field:'locked',    title: '会员状态',width:'12%',templet:'#userStatus'},

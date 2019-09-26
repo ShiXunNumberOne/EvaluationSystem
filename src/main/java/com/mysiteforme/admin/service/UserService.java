@@ -38,5 +38,8 @@ public interface UserService extends IService<User> {
 
 	Map selectUserMenuCount();
 
+	List<HashMap> selectUserinClazz(String clazz_id);
+
 	List<HashMap> findUserByDeptId(int dept_id);
+//	Page<User> queryMyUserOutMapByPage(Page<User> page,int clazz_id);
 }
