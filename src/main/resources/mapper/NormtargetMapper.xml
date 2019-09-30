@@ -23,6 +23,7 @@
         name,
         pid,
         level,
+        entropy,
         is_show as "isShow",
         sort_code as sortCode,
         #{isShow} as "myIsShow" from normtarget where
@@ -38,7 +39,7 @@
         <if test="isShow == true">
             and is_show = #{isShow}
         </if>
-        order by sort_code desc
+        order by sort_code
     </select>
 
 

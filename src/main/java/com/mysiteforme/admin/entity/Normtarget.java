@@ -31,7 +31,7 @@ public class Normtarget {
 
     public Normtarget() {
         super();
-        this.sortCode = 30;
+      //  this.sortCode = 30;
     }
     public Boolean getIsShow() {
         return isShow;

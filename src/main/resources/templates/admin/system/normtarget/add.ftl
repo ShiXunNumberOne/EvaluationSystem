@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>菜单添加--layui后台管理模板</title>
+    <title>指标添加--layui后台管理模板</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -23,70 +23,36 @@
             height: 100%;
             overflow: auto;
         }
-        .color-box {
-            float:left;
-            width:30px;
-            height:30px;
-            margin:5px;
-            border: 1px solid white;
-        }
+
     </style>
 </head>
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
     <#if parentMenu != null>
     <div class="layui-form-item">
-        <label class="layui-form-label">父菜单名称</label>
+        <label class="layui-form-label">指标类别名称</label>
         <div class="layui-input-block">
             <select name="parentId" class="layui-input" disabled="">
-                <option value="${parentMenu.id}">${parentMenu.name}</option>
+                <option value="${parentNormtarget.id}">${parentNormtarget.name}</option>
             </select>
         </div>
     </div>
     </#if>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单名称</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="请输入菜单名称">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单背景色</label>
-        <div class="layui-input-block">
-            <input type="hidden" class="layui-input" name="bgColor" >
-            <div class="color-box"></div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单地址</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" name="href"  placeholder="请输入菜单地址">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单权限</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" name="permission"  placeholder="菜单权限">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单图标</label>
-        <div class="layui-input-block">
-            <input type="hidden" class="layui-input" name="icon" id="iconValue"  placeholder="请选择菜单图标">
-            <div class="layui-input-inline" style="width: 100px;">
-                <i class="layui-icon" id="realIcon" style="display: none;font-size: 50px"></i>
+    <div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">指标名称</label>
+             <div class="layui-input-block">
+                <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="请输入指标名称">
             </div>
-            <div class="layui-input-inline" style="width: 100px;">
-                <a class="layui-btn layui-btn-normal" id="selectIcon">我来选择一个图标</a>
-            </div>
-        </div>
+         </div>
+         <div class="layui-form-item">
+             <label class="layui-form-label">指标权重</label>
+            <div class="layui-input-block">
+                <input type="number" class="layui-input" name="href"  placeholder="请输入指标权重">
+             </div>
+         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">左侧菜单栏是否显示</label>
-        <div class="layui-input-block">
-            <input type="checkbox" name="isShow" lay-skin="switch"    lay-text="是|否" checked>
-        </div>
-    </div>
+
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit="" lay-filter="addUser">立即提交</button>

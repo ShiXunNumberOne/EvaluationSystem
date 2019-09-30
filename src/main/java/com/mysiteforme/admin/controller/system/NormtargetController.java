@@ -7,6 +7,7 @@ import com.google.common.collect.Maps;
 import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
 import com.mysiteforme.admin.entity.Menu;
+import com.mysiteforme.admin.entity.Normtarget;
 import com.mysiteforme.admin.entity.VO.ZtreeVO;
 import com.mysiteforme.admin.util.RestResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -50,15 +51,14 @@ public class NormtargetController extends BaseController {
     }
 
     @GetMapping("add")
-    public String add(@RequestParam(value = "parentId",required = false) Long parentId, Model model){
-        if(parentId != null){
-            Menu menu = menuService.selectById(parentId);
-            model.addAttribute("parentMenu",menu);
+    public String add(@RequestParam(value = "pid",required = false) Integer pid, Model model){
+        if(pid != null){
+            Normtarget normtarget = normtargetService.selectById(pid);
+            model.addAttribute("parentNormtarget",normtarget);
         }
-        return "admin/system/menu/add";
+        return "admin/system/normtarget/add";
     }
 
-    @RequiresPermissions("sys:menu:add")
     @PostMapping("add")
     @ResponseBody
     @SysLog("保存新增菜单数据")
@@ -111,7 +111,6 @@ public class NormtargetController extends BaseController {
         return "admin/system/menu/edit";
     }
 
-    @RequiresPermissions("sys:menu:edit")
     @PostMapping("edit")
     @ResponseBody
     @SysLog("保存编辑菜单数据")

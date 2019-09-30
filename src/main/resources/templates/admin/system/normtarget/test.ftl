@@ -18,10 +18,10 @@
 
 <body style="margin:10px 10px 0;">
 <fieldset class="layui-elem-field">
-    <legend>系统菜单</legend>
+    <legend>指标</legend>
     <div class="layui-field-box">
     <div class="layui-inline">
-        <a class="layui-btn layui-btn-normal" data-type="addUser">添加根菜单</a>
+        <a class="layui-btn layui-btn-normal" data-type="addNormtarget">添加指标类别</a>
     </div>
     </div>
 </fieldset>
@@ -33,46 +33,32 @@
 <script type="text/javascript" src="${base}/static/js/jquery.min.js"></script>
 
 <script type="text/javascript">
-    layui.use(['tree', 'layer','table'], function() {
+    layui.use(['tree', 'layer'], function() {
         var layer = layui.layer,
              $ = layui.jquery;
 
         var layout = [
-            { name: '菜单名称', treeNodes: true, headerClass: 'value_col'},
-            {
-                name: '链接地址',
+            { name: '指标名称',
+                treeNodes: true,
                 headerClass: 'value_col',
-                colClass: 'value_col',
-                style: 'width: 15%',
-                render:function(row){
-                    return undefined === row.href?"" : row.href;
-                }
+                style: 'width: 5%',
             },
+            // {
+            //     name: '排序',
+            //     headerClass: 'value_col',
+            //     colClass: 'value_col',
+            //     style: 'width: 5%;text-align: center;',
+            //     render:function(row){
+            //         return undefined === row.sortCode?"" : row.sortCode;
+            //     }
+            // },
             {
-                name: '图标',
+                name: '权重',
                 headerClass: 'value_col',
                 colClass: 'value_col',
                 style: 'width: 5%;text-align: center;',
                 render:function(row){
-                    return undefined === row.icon?"" : '<i class="layui-icon" style="font-size: 30px;">'+row.icon+'</i>';
-                }
-            },
-            {
-                name: '排序',
-                headerClass: 'value_col',
-                colClass: 'value_col',
-                style: 'width: 5%;text-align: center;',
-                render:function(row){
-                    return undefined === row.sort?"" : row.sort;
-                }
-            },
-            {
-                name: '创建时间',
-                headerClass: 'value_col',
-                colClass: 'value_col',
-                style: 'width: 10%',
-                render:function(row){
-                    return undefined === row.createDate?"" : new Date(row.createDate).Format("yyyy-MM-dd hh:mm:ss");
+                    return undefined === row.entropy?"" : row.entropy;
                 }
             },
             {
@@ -81,9 +67,9 @@
                 colClass: 'value_col',
                 style: 'width: 30%;text-align: center;',
                 render: function(row) {
-                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="addChildMenu(' + row.id + ')"><i class="layui-icon">&#xe654;</i> 添加子菜单</a>' +
-                            '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="editChildMenu(' + row.id + ')"><i class="layui-icon">&#xe642;</i> 编辑菜单</a>' +
-                            '<a class="layui-btn layui-btn-danger layui-btn-sm" onclick="delMenu(' + row.id + ')"><i class="layui-icon">&#xe640;</i> 删除</a>';
+                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="addChildNormtarget(' + row.id + ')"><i class="layui-icon">&#xe654;</i> 添加评教指标</a>' +
+                            '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="editChildNormtarget(' + row.id + ')"><i class="layui-icon">&#xe642;</i>修改评教指标</a>' +
+                            '<a class="layui-btn layui-btn-danger layui-btn-sm" onclick="delNormtarget(' + row.id + ')"><i class="layui-icon">&#xe640;</i> 删除</a>';
                 }
             }
         ];
@@ -100,7 +86,6 @@
         $(function(){
             $.post("${base}/admin/system/normtarget/treelist",function(res){
                 if(res.success){
-                    console.log(res.data)
                     setTree(res.data,layout);
                 }else{
                     layer.msg(res.message);
@@ -109,11 +94,11 @@
         });
 
         var active={
-            addUser : function(){
+            addNormtarget : function(){
                 var addIndex = layer.open({
-                    title : "添加系统菜单",
+                    title : "添加指标类别",
                     type : 2,
-                    content : "${base}/admin/system/menu/add",
+                    content : "${base}/admin/system/normtarget/add",
                     success : function(layero, addIndex){
                         setTimeout(function(){
                             layer.tips('点击此处返回角色列表', '.layui-layer-setwin .layui-layer-close', {
@@ -137,9 +122,9 @@
 
     });
 
-    var addChildMenu = function(data){
+    var addChildNormtarget = function(data){
         var addIndex = layer.open({
-            title : "添加系统菜单",
+            title : "添加评教指标",
             type : 2,
             content : "${base}/admin/system/menu/add?parentId="+data,
             success : function(layero, addIndex){
@@ -157,7 +142,7 @@
         layer.full(addIndex);
     };
 
-    var editChildMenu = function(data){
+    var editChildNormtarget = function(data){
         var editIndex = layer.open({
             title : "编辑菜单",
             type : 2,
@@ -176,7 +161,7 @@
         });
         layer.full(editIndex);
     };
-    var delMenu =function(data){
+    var delNormtarget =function(data){
         layer.confirm("你确定要删除该菜单么？这将会使得其下的所有子菜单都删除",{btn:['是的,我确定','我再想想']},
                 function(){
                     $.post("${base}/admin/system/menu/delete",{"id":data},function (res){
@@ -190,22 +175,6 @@
                     });
                 }
         )
-    };
-    //格式化时间
-    Date.prototype.Format = function (fmt) {
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "h+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
     };
 </script>
 
