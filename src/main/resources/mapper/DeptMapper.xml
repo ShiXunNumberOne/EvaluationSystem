@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where id=#{id}
 	</update>
 	<delete id="deleteDeptById" parameterType="java.util.Map">
-        delete from dept where id=#{id}
+        update dept set  status=0 where id=#{id}
     </delete>
 
 

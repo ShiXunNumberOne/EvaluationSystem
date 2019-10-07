@@ -40,6 +40,7 @@ public class DeptController extends BaseController {
         Map map = WebUtils.getParametersStartingWith(request, "s_");
         LayerData<Dept> clazzLayerData = new LayerData<>();
         EntityWrapper<Dept> clazzEntityWrapper = new EntityWrapper<>();
+        clazzEntityWrapper.eq("status","1");
         if(!map.isEmpty()){
             String keys = (String) map.get("key");
             if(StringUtils.isNotBlank(keys)) {

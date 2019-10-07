@@ -1,6 +1,5 @@
 package com.mysiteforme.admin.controller.system;
 
-import com.alibaba.druid.sql.parser.Lexer;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.google.common.collect.Maps;
@@ -8,6 +7,7 @@ import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
 import com.mysiteforme.admin.entity.Menu;
 import com.mysiteforme.admin.entity.Normtarget;
+import com.mysiteforme.admin.entity.VO.NtreeVO;
 import com.mysiteforme.admin.entity.VO.ZtreeVO;
 import com.mysiteforme.admin.util.RestResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -36,9 +36,9 @@ public class NormtargetController extends BaseController {
     @PostMapping("tree")
     @ResponseBody
     public RestResponse tree(){
-        List<ZtreeVO> ztreeVOs = normtargetService.showTreeNormtarget();
-        LOGGER.info(JSONObject.toJSONString(ztreeVOs));
-        return RestResponse.success().setData(ztreeVOs);
+        List<NtreeVO> ntreeVOs = normtargetService.showTreeNormtarget();
+        LOGGER.info(JSONObject.toJSONString(ntreeVOs));
+        return RestResponse.success().setData(ntreeVOs);
     }
 
     @PostMapping("treelist")
@@ -54,7 +54,9 @@ public class NormtargetController extends BaseController {
     public String add(@RequestParam(value = "pid",required = false) Integer pid, Model model){
         if(pid != null){
             Normtarget normtarget = normtargetService.selectById(pid);
+            Normtarget id = normtargetService.QueryNormtargetId();
             model.addAttribute("parentNormtarget",normtarget);
+            model.addAttribute("normtargetId",id);
         }
         return "admin/system/normtarget/add";
     }
@@ -62,45 +64,37 @@ public class NormtargetController extends BaseController {
     @PostMapping("add")
     @ResponseBody
     @SysLog("保存新增菜单数据")
-    public RestResponse add(Menu menu){
-        if(StringUtils.isBlank(menu.getName())){
-            return RestResponse.failure("菜单名称不能为空");
+    public RestResponse add(Normtarget normtarget){
+        if(StringUtils.isBlank(normtarget.getName())){
+            return RestResponse.failure("指标名称不能为空");
         }
-        if(menuService.getCountByName(menu.getName())>0){
-            return RestResponse.failure("菜单名称已存在");
+        if(normtargetService.getCountByName(normtarget.getName())>0){
+            return RestResponse.failure("指标已存在");
         }
-        if(StringUtils.isNotBlank(menu.getPermission())){
-            if(menuService.getCountByPermission(menu.getPermission())>0){
-                return RestResponse.failure("权限标识已经存在");
-            }
-        }
-        if(menu.getParentId() == null){
-            menu.setLevel(1);
-            Object o = menuService.selectObj(Condition.create().setSqlSelect("max(sort)").isNull("parent_id"));
+        if(normtarget.getPid()==null){
+            normtarget.setLevel(1);
+            Object o = normtargetService.selectObj(Condition.create().setSqlSelect("max(sort)").isNull("pid"));
             int sort = 0;
             if(o != null){
                 sort =  (Integer)o +10;
             }
-            menu.setSort(sort);
+            normtarget.setSort(sort);
         }else{
-            Menu parentMenu = menuService.selectById(menu.getParentId());
-            if(parentMenu==null){
-                return RestResponse.failure("父菜单不存在");
+            Normtarget parentNormtarget = normtargetService.selectById(normtarget.getPid());
+            if(parentNormtarget==null){
+                return RestResponse.failure("指标类别不存在");
             }
-            menu.setParentIds(parentMenu.getParentIds());
-            menu.setLevel(parentMenu.getLevel()+1);
-            Object o = menuService.selectObj(Condition.create()
+            normtarget.setLevel(parentNormtarget.getLevel()+1);
+            Object o = normtargetService.selectObj(Condition.create()
                     .setSqlSelect("max(sort)")
-                    .eq("parent_id",menu.getParentId()));
+                    .eq("pid",normtarget.getPid()));
             int sort = 0;
             if(o != null){
                 sort =  (Integer)o +10;
             }
-            menu.setSort(sort);
+            normtarget.setSort(sort);
         }
-        menuService.saveOrUpdateMenu(menu);
-        menu.setParentIds(StringUtils.isBlank(menu.getParentIds())?menu.getId()+",":menu.getParentIds()+menu.getId()+",");
-        menuService.saveOrUpdateMenu(menu);
+        normtargetService.saveOrUpdateNormtarget(normtarget);
         return RestResponse.success();
     }
 
