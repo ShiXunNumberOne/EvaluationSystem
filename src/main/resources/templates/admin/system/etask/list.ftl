@@ -46,8 +46,10 @@
         {{#  } }}
     </script>
     <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">开启</a>
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">关闭</a>
     </script>
 </div>
 <div id="page"></div>
@@ -81,7 +83,7 @@
                 {field:'end_data', title: '结束时间',templet:'<div>{{ layui.laytpl.toDateString(d.endData) }}</div>',unresize: true},
                 {field:'status', title: '评教状态',templet:'#etaskStatus'},
                 {field:'nickName',  title: '创建者',templet:'<div>{{  d.user.nickName }}</div>'},
-                {fixed: 'right',    width: '15%', align: 'center',toolbar: '#barDemo'}
+                {fixed: 'right',    width: '18%', align: 'center',toolbar: '#barDemo'}
             ]],
         };
         table.render(t);
