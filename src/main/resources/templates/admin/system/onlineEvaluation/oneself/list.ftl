@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>用户总数--layui后台管理模板</title>
+    <title>自评--layui后台管理模板</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -44,17 +44,17 @@
             console.log(data.value)
             if(data.value!=""){
                 table.reload("idTest",{
-                    url:"/admin/system/onlineEvaluation/selectBatchIdStudentEvaluation"
+                    url:"/admin/system/onlineEvaluation/selectBatchIdOneselfEvaluation"
                     ,where: {
-                        user_id:4
+                        user_id:2
                         ,batch_id:data.value
                     }
                 })
             }else {
                 table.reload("idTest",{
-                    url:"/admin/system/onlineEvaluation/selectStudentEvaluation"
+                    url:"/admin/system/onlineEvaluation/selectOneselfEvaluation"
                     ,where: {
-                        user_id:4
+                        user_id:2
                     }
                 })
             }
@@ -68,15 +68,13 @@
 <script type="text/html" id="xuHao">
     {{d.LAY_INDEX}}
 </script>
-<table class="layui-table" lay-data="{width:1100,url:'/admin/system/onlineEvaluation/selectStudentEvaluation', id:'idTest',where:{user_id:4}}" lay-filter="demo">
+<table class="layui-table" lay-data="{width:1100,url:'/admin/system/onlineEvaluation/selectOneselfEvaluation', id:'idTest',where:{user_id:2}}" lay-filter="demo">
     <thead>
     <tr>
         <th lay-data="{field: '序号',templet: '#xuHao',sort: true,width:80}">序号</th>
         <th lay-data="{field:'ename',width:160}">批次</th>
-        <th lay-data="{field:'czcode',width:90}">班级</th>
-        <th lay-data="{field:'ccode',sort: true,width:160}">课程代码</th>
-        <th lay-data="{field:'cname',sort: true,width:160}">课程名称</th>
-        <th lay-data="{field:'nick_name',width:160}">授课老师</th>
+        <th lay-data="{field:'dname',width:90}">学院</th>
+        <th lay-data="{field:'nick_name',width:160}">老师</th>
         <th lay-data="{field:'rname',width:160}">用户角色</th>
         <th lay-data="{title:'操作', toolbar: '#barDemo'}"></th>
     </tr>
@@ -107,7 +105,7 @@
                             // ,maxmin: true //开启最大化最小化按钮
                             ,area: ["100%","100%"]
                             ,title: "在线评教"
-                            ,content:"/admin/system/questionnaire/student/GoOnlineEvaluation"
+                            ,content:"/admin/system/questionnaire/oneself/GoOnlineEvaluation"
                             ,success: function (layero,index) {
                                 var body = layer.getChildFrame('body', index);
                                 var iframe = window['layui-layer-iframe' + index];
