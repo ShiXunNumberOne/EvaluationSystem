@@ -7,7 +7,7 @@
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="pid" column="pid"/>
-        <result property="sortCode" column="sort_code"/>
+        <result property="sort" column="sort"/>
         <result property="level" column="level"/>
         <result property="entropy" column="entropy"/>
         <result property="isNodelast" column="isNodelast"/>
@@ -23,8 +23,11 @@
         name,
         pid,
         level,
+        entropy,
         is_show as "isShow",
-        sort_code as sortCode,
+        isNodelast,
+        sort,
+		status,
         #{isShow} as "myIsShow" from normtarget where
         status = 1
         <choose>
@@ -38,11 +41,13 @@
         <if test="isShow == true">
             and is_show = #{isShow}
         </if>
-        order by sort_code desc
+        order by sort desc
     </select>
+<select id="QueryNormtargetId" resultType="com.mysiteforme.admin.entity.Normtarget">
+    select id from normtarget order by id desc limit 1
+</select>
 
-
-    <select id="showAllMenusList" resultType="com.mysiteforme.admin.entity.Menu"  parameterType="java.util.Map">
+    <select id="showAllNormtargetList" resultType="com.mysiteforme.admin.entity.Menu"  parameterType="java.util.Map">
         SELECT
         m.id,
         m.name,

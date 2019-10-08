@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mysiteforme.admin.dao.OnlineEvaluationDao">
+
+    <!--生成学生评教的页面-->
+    <select id="selectStudentEvaluation" resultType="HashMap">
+       		select cz.code as czcode,c.name as cname,u.id,uu.nick_name,ur.role_id,r.name,ek.name as ename,r.name as rname,c.code as ccode,c.name as cname from sys_user u
+	          left join clazz cz on cz.id=u.clazz_id
+	          left join schedules ss on u.clazz_id=ss.clazz_id
+              left join course c on ss.course_id=c.id
+			  left join sys_user uu on uu.id=ss.teacher_id
+              left join sys_user_role ur on u.id=ur.user_id
+		      left join sys_role r on r.id=ur.role_id,etask ek
+              where u.id=#{user_id} and r.name!="教师"  and ek.status=0 and ek.name!=' '
+    </select>
+    <!--同行评教页面-->
+    <select id="selectColleagueEvaluation" resultType="HashMap">
+       select ek.name as ename,uu.id,uu.nick_name,d.name as dname,ur.role_id ,r.name as rname from sys_user u
+          left join sys_user uu on u.dept_id=uu.dept_id
+          left join sys_user_role ur on uu.id=ur.user_id
+          left join sys_role r on r.id=ur.role_id
+          left join dept d on uu.dept_id=d.id,etask ek
+        where u.id=#{user_id} and u.id!=uu.id and r.name="教师"
+    </select>
+    <!--自我评教页面-->
+    <select id="selectOneselfEvaluation" resultType="HashMap">
+       select ek.name as ename,uu.id,uu.nick_name,d.name as dname,ur.role_id,r.name as rname from sys_user u
+          left join sys_user uu on u.dept_id=uu.dept_id
+          left join sys_user_role ur on uu.id=ur.user_id
+          left join sys_role r on r.id=ur.role_id
+          left join dept d on uu.dept_id=d.id,etask ek
+        where u.id=#{user_id} and u.id=uu.id and r.name="教师"
+    </select>
+    <!--动态生成批次搜索下拉框-->
+    <select id="selectBatchName" resultType="com.mysiteforme.admin.entity.Etask">
+        select * from etask
+    </select>
+
+    <!--学生根据批次模糊搜索-->
+    <select id="selectBatchIdStudentEvaluation" resultType="HashMap">
+       select u.clazz_id,c.name,u.id,uu.nick_name,ur.role_id,r.name as rname,ek.name,c.id from sys_user u
+	         left join schedules ss on u.clazz_id=ss.clazz_id
+             left join course c on ss.course_id=c.id
+			  left join sys_user uu on uu.id=ss.teacher_id
+              left join sys_user_role ur on u.id=ur.user_id
+		      left join sys_role r on r.id=ur.role_id,etask ek
+               where u.id=#{user_id} and r.name!="教师"  and ek.status=0 and ek.id=#{batch_id}
+    </select>
+    <!--同行批次模糊查询-->
+    <select id="selectBatchIdColleagueEvaluation" resultType="HashMap">
+         select ek.name as ename,uu.id,uu.nick_name,d.name as dname,ur.role_id,r.name as rname from sys_user u
+         left join sys_user uu on u.dept_id=uu.dept_id
+          left join sys_user_role ur on uu.id=ur.user_id
+          left join sys_role r on r.id=ur.role_id
+          left join dept d on uu.dept_id=d.id,etask ek
+        where u.id=#{user_id} and ek.id=#{batch_id} and u.id!=uu.id and r.name="教师"
+    </select>
+    <!--自评批次模糊查询-->
+    <select id="selectBatchIdOneselfEvaluation" resultType="HashMap">
+         select ek.name as ename,uu.id,uu.nick_name,d.name as dname,ur.role_id ,r.name as rname from sys_user u
+         left join sys_user uu on u.dept_id=uu.dept_id
+          left join sys_user_role ur on uu.id=ur.user_id
+          left join sys_role r on r.id=ur.role_id
+          left join dept d on uu.dept_id=d.id,etask ek
+        where u.id=2 and ek.id=1 and u.id=uu.id and r.name="教师"
+    </select>
+</mapper>

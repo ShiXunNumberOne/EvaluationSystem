@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface NormtargetDao extends BaseMapper<Normtarget> {
     List<Normtarget> showAllNormtargetList(Map map);
-
+    Normtarget QueryNormtargetId();
     List<Normtarget> getNormtargets(Map map);
 
 //    List<ShowMenu> selectShowMenuByUser(Map<String,Object> map);
