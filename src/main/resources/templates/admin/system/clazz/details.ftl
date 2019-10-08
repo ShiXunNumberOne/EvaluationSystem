@@ -77,9 +77,8 @@
     <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
     <!--</script>-->
     <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <#--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>-->
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
 
 
@@ -142,17 +141,68 @@ console.log(parent.a)
         //     }
         // }, 'data');
         <#--//监听工具条-->
-        table.on('tool(demo)', function(obj){
-            var data = obj.data;
-            if(obj.event === 'detail'){
-                console.log(data)
-            } else if(obj.event === 'del'){
-                layer.confirm('真的删除行么', function(index){
-                    obj.del();
-                    layer.close(index);
-                });
-            } else if(obj.event === 'edit'){
-                console.log(data)
+        // table.on('tool(demo)', function(obj){
+        //     var data = obj.data;
+        //     if(obj.event === 'detail'){
+        //         layer.open({
+        //             type: 2,
+        //             title: false,
+        //             area: ['33em', '27em'],
+        //             shade: 0.3,
+        //             closeBtn: 2,
+        //             shadeClose: false,
+        //             offset: '100px',
+        //             title:'新增班级',
+        //             anim: 1,
+        //             resize:true,
+        //             // time:timee,
+        //             content: '/class/goaddclass',
+        //             end: function(){ //此处用于演示
+        //                 console.log("jingru")
+        //                 if (departments_id!=null) {
+        //                     table.reload('idTest', {
+        //                         page: {
+        //                             curr: 1 //重新从第 1 页开始
+        //                         },
+        //                         url:"/class/classindepartments"
+        //                         ,where: {
+        //                             departments_id:departments_id
+        //                         }
+        //                     }, 'data');
+        //                 }else {
+        //                     table.reload('idTest', {
+        //                         page: {
+        //                             curr: 1 //重新从第 1 页开始
+        //                         },
+        //                         url:"/class/goclass"
+        //
+        //                     }, 'data')
+        //                 }
+        //
+        //
+        //             }
+        //         });
+
+            } else
+                if(obj.event === 'edit'){
+                    var editIndex = layer.open({
+                        title : "编辑用户",
+                        type : 2,
+                        content : "${base}/admin/system/user/edit?id="+data.id,
+                        success : function(layero, index){
+                            setTimeout(function(){
+                                layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
+                                    tips: 3
+                                });
+                            },500);
+                        }
+                    });
+                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+                    $(window).resize(function(){
+                        layer.full(editIndex);
+                    });
+                    layer.full(editIndex);
+
 
             }
         });

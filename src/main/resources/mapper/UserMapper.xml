@@ -112,6 +112,6 @@
     </delete>
 
     <select id="selectUserinClazz" resultType="HashMap" parameterType="String">
-        select sys_user.login_name,sys_user.nick_name ,sys_user.gender from sys_user where clazz_id=#{clazz_id}
+        select * from sys_user where clazz_id=#{clazz_id}
     </select>
 </mapper>
