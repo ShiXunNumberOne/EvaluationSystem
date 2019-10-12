@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public class EtaskController extends BaseController {
         Map map = WebUtils.getParametersStartingWith(request, "s_");
         LayerData<Etask> etaskLayerData = new LayerData<>();
         EntityWrapper<Etask> etaskEntityWrapper = new EntityWrapper<>();
+        etaskEntityWrapper.eq("flag",true);
         if(!map.isEmpty()){
             String keys = (String) map.get("key");
             if(StringUtils.isNotBlank(keys)) {
@@ -116,4 +118,62 @@ public class EtaskController extends BaseController {
         return RestResponse.success();
     }
 
+    @PostMapping("open")
+        @ResponseBody
+        @SysLog("删除对战数据(单个)")
+        public RestResponse openEtaskById(@RequestParam(value = "id",required = false)int id){
+            if(id<=0){
+                return RestResponse.failure("参数错误");
+            }
+            Etask etask = etaskService.findEtaskById(id);
+            if(etask == null){
+                return RestResponse.failure("批次不存在");
+            }
+            etaskService.openEtaskById(id);
+            return RestResponse.success();
+    }
+    @PostMapping("close")
+    @ResponseBody
+    @SysLog("删除对战数据(单个)")
+    public RestResponse closeEtaskById(@RequestParam(value = "id",required = false)int id){
+        if(id<=0){
+            return RestResponse.failure("参数错误");
+        }
+        Etask etask = etaskService.findEtaskById(id);
+        if(etask == null){
+            return RestResponse.failure("批次不存在");
+        }
+        etaskService.closeEtaskById(id);
+        return RestResponse.success();
+    }
+
+    @PostMapping("end")
+    @ResponseBody
+    @SysLog("删除对战数据(单个)")
+    public RestResponse endEtaskById(@RequestParam(value = "id",required = false)int id){
+        if(id<=0){
+            return RestResponse.failure("参数错误");
+        }
+        Etask etask = etaskService.findEtaskById(id);
+        if(etask == null){
+            return RestResponse.failure("批次不存在");
+        }
+        etaskService.endEtaskById(id);
+        return RestResponse.success();
+    }
+
+    @PostMapping("suspend")
+    @ResponseBody
+    @SysLog("删除对战数据(单个)")
+    public RestResponse suspendEtaskById(@RequestParam(value = "id",required = false)int id){
+        if(id<=0){
+            return RestResponse.failure("参数错误");
+        }
+        Etask etask = etaskService.findEtaskById(id);
+        if(etask == null){
+            return RestResponse.failure("批次不存在");
+        }
+        etaskService.suspendEtaskById(id);
+        return RestResponse.success();
+    }
 }

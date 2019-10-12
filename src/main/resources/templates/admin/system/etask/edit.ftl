@@ -36,13 +36,13 @@
         <div class="layui-inline">
             <label class="layui-form-label">开始时间</label>
             <div class="layui-input-block">
-                <input type="date" style="width: 58%" class="layui-input" name="startData" lay-verify="required" placeholder="开始时间" value="${etask.startData}">
+                <input type="text" style="width: 58%"  id="test2" class="layui-input" name="startData" lay-verify="required" placeholder="开始时间" value="${etask.startData}">
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="date" style="width:58%" class="layui-input" name="endData" lay-verify="required" placeholder="结束时间" value="${etask.endData}">
+                <input type="text" style="width:58%" id="test" class="layui-input" name="endData" lay-verify="required" placeholder="结束时间" value="${etask.endData}">
             </div>
         </div>
     </div>
@@ -61,12 +61,22 @@
 </form>
 <script type="text/javascript" src="${base}/static/layui/layui.js"></script>
 <script>
-    var index = parent.layer.getFrameIndex(window.name); //当前窗口索引
-    layui.use(['form','jquery','layer'],function(){
+
+    // var index = parent.layer.getFrameIndex(window.name); //当前窗口索引
+            // console.log(a)
+    layui.use(['form','jquery','layer','laydate'],function(){
         var form = layui.form,
                 $    = layui.jquery,
                 layer = layui.layer,
+                laydate = layui.laydate,
                 status = ${etask.status};
+        // $("#test").val('2019/01/1')
+        console.log($("#test").val())
+//自定义日期格式
+        laydate.render({
+            elem: ['#test','#test2']
+            ,format: 'yyyy-M-d' //可任意组合
+        });
 
         form.on("submit(addEtask)",function(data){
             if(data.field.id == null){

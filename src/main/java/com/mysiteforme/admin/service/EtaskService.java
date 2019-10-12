@@ -12,5 +12,8 @@ public interface EtaskService extends IService<Etask> {
     List<Etask> selectAll();
     int updataEtaskById(Etask etask);
     int deleteEtaskById(int id);
-
+    int openEtaskById(int id);
+    int closeEtaskById(int id);
+    int suspendEtaskById(int id);
+    int endEtaskById(int id);
 }

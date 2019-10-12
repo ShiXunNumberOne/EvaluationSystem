@@ -8,6 +8,7 @@
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="status" column="status"/>
+        <result property="flag" column="flag"/>
         <result property="startData" column="start_data"/>
         <result property="endData" column="end_data"/>
         <result property="createuserId" column="createuser_id"/>
@@ -29,9 +30,21 @@
         </set>
         where id=#{id}
     </update>
-    <delete id="deleteEtaskById" parameterType="java.util.Map">
-        delete from etask where id=#{id}
-    </delete>
-
+    <update id="deleteEtaskById" parameterType="java.util.Map">
+        update  etask set flag=0 where id=#{id}
+    </update>
+    <update id="openEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
+        update etask set status=1  where id=#{id}
+    </update>
+    <!--结束删除-->
+    <update id="endEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
+        update etask set status=3  where id=#{id}
+    </update>
+    <update id="closeEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
+        update etask set status=3  where id=#{id}
+    </update>
+    <update id="suspendEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
+        update etask set status=2  where id=#{id}
+    </update>
 
 </mapper>

@@ -11,4 +11,8 @@ public interface EtaskDao extends BaseMapper<Etask> {
     Etask findEtaskById(int id);
     int updataEtaskById(Etask etask);
     int deleteEtaskById(int id);
+    int openEtaskById(int id);
+    int closeEtaskById(int id);
+    int suspendEtaskById(int id);
+    int endEtaskById(int id);
 }
