@@ -15,5 +15,6 @@ public interface DeptService extends IService<Dept> {
 	Dept selectDeptByMap(int deptId);
 	int updataDeptById(Dept dept);
 	int deleteDeptById(int id);
+	int getCountByName(String name);
 
 }

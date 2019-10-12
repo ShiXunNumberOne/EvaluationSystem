@@ -15,5 +15,6 @@ public interface CourseService extends IService<Course> {
 	Course selectCourseByMap(int deptId);
 	int updataCourseById(Course course);
 	int deleteCourseById(int id);
+	int getCountByName(String name);
 
 }

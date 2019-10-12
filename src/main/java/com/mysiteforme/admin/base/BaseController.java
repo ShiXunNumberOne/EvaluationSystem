@@ -76,6 +76,10 @@ public class BaseController {
 
 	@Autowired
 	protected  NormtargetService  normtargetService;
+
+	@Autowired
+	protected  NormitemService  normitemService;
+
 	@Autowired
 	protected  EtaskService  etaskService;
 }

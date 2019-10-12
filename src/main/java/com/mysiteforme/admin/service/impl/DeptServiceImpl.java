@@ -11,6 +11,7 @@ import com.mysiteforme.admin.dao.DeptDao;
 import com.mysiteforme.admin.dao.UserDao1;
 import com.mysiteforme.admin.entity.Clazz;
 import com.mysiteforme.admin.entity.Dept;
+import com.mysiteforme.admin.entity.Normtarget;
 import com.mysiteforme.admin.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,14 @@ public class DeptServiceImpl  extends ServiceImpl<DeptDao, Dept> implements Dept
 	public int deleteDeptById(int id) {
 		int c = baseMapper.deleteDeptById(id);
 		return c;
+	}
+
+	@Override
+	public int getCountByName(String name) {
+		EntityWrapper<Dept> wrapper = new EntityWrapper<>();
+		wrapper.eq("status",1);
+		wrapper.eq("name",name);
+		return baseMapper.selectCount(wrapper);
 	}
 
 
