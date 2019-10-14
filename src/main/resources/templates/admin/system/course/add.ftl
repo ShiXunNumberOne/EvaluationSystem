@@ -56,12 +56,6 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">是否启用</label>
-        <div class="layui-input-block">
-            <input type="checkbox" name="status" lay-skin="switch"  lay-filter="status"  lay-text="启用|停用" checked>
-        </div>
-    </div>
-    <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit="" lay-filter="addCourse">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -80,12 +74,6 @@
             var loadIndex = layer.load(2, {
                 shade: [0.3, '#333']
             });
-            //判断用户是否启用
-            if(undefined !== data.field.status && null != data.field.status){
-                data.field.status = 0;
-            }else{
-                data.field.status = 1;
-            }
             $.ajax({
                 type:"POST",
                 url:"${base}/admin/system/course/add",

@@ -84,6 +84,14 @@
                 <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="请输入名称">
             </div>
         </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label">角色</label>
+            <div class="layui-input-block">
+                <select name="r_id" id="role"  lay-search>
+                    <option value="">请选择角色</option>
+                </select>
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">排序码</label>
             <div class="layui-input-block">
@@ -142,6 +150,17 @@
         $    = layui.jquery;
 
         var arr = [];
+        $.ajax({
+            url: '${base}/admin/system/role/queryRole',
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+                $.each(data.data, function (index,item) {
+                    $('#role').append(new Option(item.name,item.id));// 下拉菜单里添加元素
+                });
+                layui.form.render("select");
+            }
+        });
         form.on("submit(addUser)",function(data){
             //判断左侧是否显示
             if(undefined !== data.field.isShow && null != data.field.isShow){

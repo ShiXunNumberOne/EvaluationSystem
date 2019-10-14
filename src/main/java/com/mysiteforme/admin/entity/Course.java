@@ -6,6 +6,7 @@ public class Course {
 	private String code;
 	private String note;
 
+
 	private Integer status;
 	public String getNote() {
 		return note;

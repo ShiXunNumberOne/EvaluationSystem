@@ -46,16 +46,12 @@
                 table.reload("idTest",{
                     url:"/admin/system/onlineEvaluation/selectBatchIdOneselfEvaluation"
                     ,where: {
-                        user_id:2
-                        ,batch_id:data.value
+                        batch_id:data.value
                     }
                 })
             }else {
                 table.reload("idTest",{
                     url:"/admin/system/onlineEvaluation/selectOneselfEvaluation"
-                    ,where: {
-                        user_id:2
-                    }
                 })
             }
 
@@ -68,12 +64,14 @@
 <script type="text/html" id="xuHao">
     {{d.LAY_INDEX}}
 </script>
-<table class="layui-table" lay-data="{width:1100,url:'/admin/system/onlineEvaluation/selectOneselfEvaluation', id:'idTest',where:{user_id:2}}" lay-filter="demo">
+<table class="layui-table" lay-data="{width:1100,url:'/admin/system/onlineEvaluation/selectOneselfEvaluation'}" lay-filter="demo">
     <thead>
     <tr>
         <th lay-data="{field: '序号',templet: '#xuHao',sort: true,width:80}">序号</th>
         <th lay-data="{field:'ename',width:160}">批次</th>
         <th lay-data="{field:'dname',width:90}">学院</th>
+        <th lay-data="{field:'ccode',sort: true,width:160}">课程代码</th>
+        <th lay-data="{field:'cname',sort: true,width:160}">课程名称</th>
         <th lay-data="{field:'nick_name',width:160}">老师</th>
         <th lay-data="{field:'rname',width:160}">用户角色</th>
         <th lay-data="{title:'操作', toolbar: '#barDemo'}"></th>
@@ -84,6 +82,7 @@
 <!--表格的操作-->
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">开始评教</a>
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看评教</a>
 </script>
 
 
@@ -97,7 +96,6 @@
             if(obj.event === 'edit'){//开始评教
                 table.on('tool(demo)', function(obj){
                     var data = obj.data;
-                    var user_id_session = 4
                     if(obj.event === 'edit'){//开始评教
                         layer.open({
                             type:2
@@ -110,7 +108,7 @@
                                 var body = layer.getChildFrame('body', index);
                                 var iframe = window['layui-layer-iframe' + index];
                                 // 向子页面的全局函数
-                                iframe.inputDataHandle(obj,user_id_session);
+                                iframe.inputDataHandle(obj);
                             }
                         })
                     }

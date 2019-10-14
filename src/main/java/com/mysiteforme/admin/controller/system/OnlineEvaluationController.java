@@ -4,6 +4,7 @@ import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
 import com.mysiteforme.admin.base.MySysUser;
 import com.mysiteforme.admin.entity.Etask;
+import com.mysiteforme.admin.entity.ScoreSum;
 import com.mysiteforme.admin.service.OnlineEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +117,36 @@ public class OnlineEvaluationController extends BaseController {
         result.put("msg","");
         result.put("count",users.size());
         result.put("data",users);
+        return result;
+    }
+    @ResponseBody
+    @RequestMapping("OnlineEvaluationFraction")
+    public Map OnlineEvaluationFraction(String optionsAll_id,Long eavaluationId ,Long earnedId,Integer questionnaireId,Integer courses_id,String answers,String target_name_id){
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes)ra).getRequest();
+        HttpSession session = request.getSession();
+
+        String a[]=optionsAll_id.split(",");
+        String t[]=target_name_id.split(",");
+        Map result =new HashMap();
+        float sum = 0;
+        for (int i=0;i<a.length;i++){
+            String options = a[i];
+            String targets_id = t[i];
+            int options_id = Integer.parseInt(options);
+            int target_id = Integer.parseInt(targets_id);
+//            ScoreSum scoreSum = new ScoreSum();
+            List<ScoreSum> score = onlineEvaluationService.StudentOnlineEvaluationFraction(options_id,target_id);
+            sum = sum + score.get(0).getScore();
+        }
+        Float score = Float.valueOf(sum);
+        System.out.println(sum);
+        if(onlineEvaluationService.insertOnlineEvaluation(eavaluationId,earnedId,questionnaireId,courses_id,score)){
+            result.put("data",1);
+        }else{
+            result.put("data",0);
+        }
+
         return result;
     }
 }

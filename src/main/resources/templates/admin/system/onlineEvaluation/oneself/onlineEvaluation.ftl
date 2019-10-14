@@ -33,17 +33,14 @@
 </form>
 
 <script>
-    function inputDataHandle(obj,user_id_session){
+    function inputDataHandle(obj,user_id){
         console.log(obj)
-        console.log(user_id_session)
         layui.use(['form', 'upload', 'layer'], function () {
             var form = layui.form;
             $.ajax({
                 url:"/admin/system/questionnaire/selectOneselfOnlineEvaluation",
                 type:"get",
-                data:{papers_id:obj.data.papers_id},
                 success:function (res) {
-
                     var a=res.data
                     var b
                     var i=1
@@ -78,14 +75,14 @@
             $("#Submission").click(function (e) {
                 e.preventDefault()
                 console.log("开始")
-                var rater = user_id_session;//评分人
-                var gradeds = obj.data.user_id;//被评分人
-                var papers_id = obj.data.papers_id;//批次id
-                var courses_id = obj.data.courses_id;//课程id
+                var rater =obj.data.id;//评分人
+                var gradeds = obj.data.id;//被评分人
+                var etask_id = obj.data.eid;//批次id
+                var courses_id = obj.data.cid;//课程id
 
                 console.log("评分人id:"+rater)
                 console.log("被评分人id:"+gradeds)
-                console.log("批次id:"+papers_id)
+                console.log("批次id:"+etask_id)
                 console.log("课程id:"+courses_id)
 
                 //答案
@@ -94,6 +91,47 @@
                 }).get().join(',');
 
                 console.log("答案："+answers);
+                //指标
+                var target_name_id = $("#targetOptions input:radio:checked").map(function (index, elem) {
+                    return $(elem).attr("name");
+                }).get().join(',');
+                console.log("target_name_id:"+target_name_id)
+                var target_length = $("#targetOptions label").length //有多少选项
+
+                //答案的长度
+                var answers_length = $("#targetOptions input:radio:checked").map(function (index, elem) {
+                    return $(elem).val();
+                })
+
+
+                //判断是否都有选择
+                if(answers_length.length>=target_length){
+                    $.ajax({
+                        type:"get",
+                        url:"/admin/system/onlineEvaluation/OnlineEvaluationFraction",
+                        data:{
+                            eavaluationId:rater,
+                            earnedId:gradeds,  //被评人id
+                            questionnaireId:etask_id,//批次ID
+                            courses_id:courses_id,//课程id
+                            answers:answers,      //答案id
+                            optionsAll_id:answers,//答案id
+                            target_name_id:target_name_id//指标id
+                        },
+                        success:function (res) {
+                            if (res.data==1){
+                                layer.msg('评教完毕',{icon:1})
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+
+                            } else{
+                                layer.msg('评教失败',{icon:2})
+                            }
+                        }
+                    })
+                }else {
+                    layer.msg('有未选择题目',{icon:2})
+                }
 
 
 
