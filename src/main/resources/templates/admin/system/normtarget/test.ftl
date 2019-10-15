@@ -146,7 +146,7 @@
         var editIndex = layer.open({
             title : "编辑指标",
             type : 2,
-            content : "${base}/admin/system/normtarget/edit?id="+data,
+            content : "${base}/admin/system/normtarget/edit1?id="+data,
             success : function(layero, index){
                 setTimeout(function(){
                     layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {

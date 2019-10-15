@@ -11,7 +11,7 @@
 			  left join sys_user uu on uu.id=ss.teacher_id
               left join sys_user_role ur on u.id=ur.user_id
 		      left join sys_role r on r.id=ur.role_id,etask ek
-              where u.id=#{user_id} and r.name!="教师"  and ek.status=0 and ek.name!=' '
+              where u.id=#{user_id} and r.name!="教师"  and ek.status=0 and ek.name!=' 'and u.clazz_id!=' '
     </select>
     <!--同行评教页面-->
     <select id="selectColleagueEvaluation" resultType="HashMap">

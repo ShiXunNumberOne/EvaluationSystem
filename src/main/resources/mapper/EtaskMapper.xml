@@ -30,21 +30,35 @@
         </set>
         where id=#{id}
     </update>
+
+    <update id="onoroffEtaskById" parameterType="java.util.Map">
+        update  etask set status=1 where id=#{id}
+    </update>
+
     <update id="deleteEtaskById" parameterType="java.util.Map">
         update  etask set flag=0 where id=#{id}
     </update>
+
     <update id="openEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
         update etask set status=1  where id=#{id}
     </update>
     <!--结束删除-->
-    <update id="endEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
-        update etask set status=3  where id=#{id}
-    </update>
-    <update id="closeEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
-        update etask set status=3  where id=#{id}
-    </update>
+
     <update id="suspendEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
         update etask set status=2  where id=#{id}
     </update>
+
+    <update id="endEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
+        update etask set status=3  where id=#{id}
+    </update>
+
+    <update id="closeEtaskById" parameterType="com.mysiteforme.admin.entity.Etask" >
+        update etask set status=3  where id=#{id}
+    </update>
+    <!--查询处在开启状态的批次数量-->
+    <select id="SelectOpen" resultType="int">
+        select count(*) from etask where status=1
+    </select>
+
 
 </mapper>

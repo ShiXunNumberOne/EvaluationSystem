@@ -82,6 +82,7 @@ public class ClazzController extends BaseController {
 		Map map = WebUtils.getParametersStartingWith(request, "s_");
 		LayerData<Clazz> clazzLayerData = new LayerData<>();
 		EntityWrapper<Clazz> clazzEntityWrapper = new EntityWrapper<>();
+		clazzEntityWrapper.eq("status","1");
 		if(!map.isEmpty()){
 			String keys = (String) map.get("key");
 			if(StringUtils.isNotBlank(keys)) {
@@ -143,7 +144,9 @@ public class ClazzController extends BaseController {
 		if(clazz.getDepts() == null || clazz.getDepts() .size()==1){
 			return  RestResponse.failure("请选择学院");
 		}
-
+		if(clazzService.getCountByName(clazz.getCode())>0){
+			return RestResponse.failure("班级已存在");
+		}
 		clazzService.saveClazz(clazz);
 		if(clazz.getId() == null || clazz.getId() == 0){
 			return RestResponse.failure("保存班级信息出错");

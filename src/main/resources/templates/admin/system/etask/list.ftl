@@ -44,6 +44,7 @@
         <#--{{#  } else { }}-->
         <#--<span class="layui-badge layui-bg-gray">未开启</span>-->
         <#--{{#  } }}-->
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
         {{#  if(d.status == 0){ }}
         <a class="layui-btn layui-btn-xs" lay-event="open">开启</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
@@ -59,7 +60,6 @@
     </script>
     <script type="text/html" id="etaskStatus">
         <#--<a class="layui-btn layui-btn-xs" lay-event="edit">开启</a>-->
-        <#--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
         <#--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
         <#--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">关闭</a>-->
         {{#  if(d.status == 1){ }}
@@ -154,18 +154,48 @@
                     <#--}-->
                 <#--)-->
             <#--}-->
+            <#--if(obj.event  === 'open'){ //开启按钮-->
+
+                            <#--$.ajax({-->
+                                <#--url: '${base}/admin/system/etask/open'，-->
+                                <#--type:'post',-->
+                                <#--data: {-->
+                                    <#--id: data.id-->
+                            <#--},-->
+                            <#--success:function (res) {-->
+                                <#--layer.msg(res.result);-->
+                                <#--parent.location.reload();-->
+                            <#--}-->
+                            <#--})-->
+                        <#--}-->
+                    <#--}-->
+                <#--})-->
+            <#--}-->
+
             if(obj.event  === 'open'){ //开启按钮
-                $.ajax({
-                    url:'${base}/admin/system/etask/open',
+                $. ajax({
+                    url:'${base}/admin/system/etask/onoroff',
                     type:'post',
-                    data:{
-                        id: data.id
-                    },
-                    success:function (res) {
-                        layer.msg(res.result);
-                        parent.location.reload();
+                    data:{},
+                    success:function(res) {
+                        if (res == 1) {
+                            //当有批次已经在开启中
+                            layer.msg('当前已有批次在开启中，请先暂停或结束已开启批次! ');
+                        } else {
+                            $.ajax({
+                                url: '${base}/admin/system/etask/open',
+                                type: 'post',
+                                data: {
+                                    id: data.id
+                                },
+                                success: function (res) {
+                                    layer.msg(res.result);
+                                    parent.location.reload();
+                                }
+                            })
+                        }
                     }
-                })
+                    })
             } else if(obj.event  === 'suspend'){ //暂停
                 $.ajax({
                     url:'${base}/admin/system/etask/suspend',
