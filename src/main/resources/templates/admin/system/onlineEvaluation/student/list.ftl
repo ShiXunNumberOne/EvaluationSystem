@@ -86,6 +86,7 @@
 <!--表格的操作-->
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">开始评教</a>
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看评教</a>
 </script>
 
 
@@ -99,7 +100,7 @@
             if(obj.event === 'edit'){//开始评教
                 table.on('tool(demo)', function(obj){
                     var data = obj.data;
-                    var user_id_session = 4
+                    var user_id = ${currentUser.id}
                     if(obj.event === 'edit'){//开始评教
                         layer.open({
                             type:2
@@ -112,7 +113,7 @@
                                 var body = layer.getChildFrame('body', index);
                                 var iframe = window['layui-layer-iframe' + index];
                                 // 向子页面的全局函数
-                                iframe.inputDataHandle(obj,user_id_session);
+                                iframe.inputDataHandle(obj,user_id);
                             }
                         })
                     }

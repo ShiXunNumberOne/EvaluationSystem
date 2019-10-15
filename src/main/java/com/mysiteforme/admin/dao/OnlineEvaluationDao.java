@@ -1,6 +1,8 @@
 package com.mysiteforme.admin.dao;
 
 import com.mysiteforme.admin.entity.Etask;
+import com.mysiteforme.admin.entity.ScoreSum;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -14,5 +16,7 @@ public interface OnlineEvaluationDao {
     List<HashMap> selectBatchIdStudentEvaluation(Long user_id,int batch_id);
     List<HashMap> selectBatchIdColleagueEvaluation(Long user_id,int batch_id);
     List<HashMap> selectBatchIdOneselfEvaluation(Long user_id,int batch_id);
+   List<ScoreSum> StudentOnlineEvaluationFraction(@Param("oid") int oid, @Param("tid") int tid);
+   int insertOnlineEvaluation(@Param("eavaluationId") Long eavaluationId,@Param("earnedId")Long earnedId,@Param("questionnaireId")Integer questionnaireId,@Param("courseId") Integer course_id,@Param("score")float score);
 
 }

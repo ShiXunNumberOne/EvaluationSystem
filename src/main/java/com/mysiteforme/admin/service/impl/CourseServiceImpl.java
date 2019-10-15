@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import com.mysiteforme.admin.dao.CourseDao;
 import com.mysiteforme.admin.dao.UserDao1;
 import com.mysiteforme.admin.entity.Course;
+import com.mysiteforme.admin.entity.Dept;
 import com.mysiteforme.admin.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,14 @@ public class CourseServiceImpl  extends ServiceImpl<CourseDao, Course> implement
 	public int deleteCourseById(int id) {
 		int c = baseMapper.deleteCourseById(id);
 		return c;
+	}
+
+	@Override
+	public int getCountByName(String name) {
+		EntityWrapper<Course> wrapper = new EntityWrapper<>();
+		wrapper.eq("status",1);
+		wrapper.eq("name",name);
+		return baseMapper.selectCount(wrapper);
 	}
 
 

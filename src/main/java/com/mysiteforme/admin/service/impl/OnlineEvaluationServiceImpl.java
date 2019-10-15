@@ -2,6 +2,7 @@ package com.mysiteforme.admin.service.impl;
 
 import com.mysiteforme.admin.dao.OnlineEvaluationDao;
 import com.mysiteforme.admin.entity.Etask;
+import com.mysiteforme.admin.entity.ScoreSum;
 import com.mysiteforme.admin.service.OnlineEvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,20 @@ public class OnlineEvaluationServiceImpl implements OnlineEvaluationService {
     @Override
     public List<HashMap> selectBatchIdOneselfEvaluation(Long user_id, int batch_id) {
         return onlineEvaluationDao.selectBatchIdOneselfEvaluation(user_id,batch_id);
+    }
+
+    @Override
+    public List<ScoreSum> StudentOnlineEvaluationFraction(int oid, int tid) {
+        return onlineEvaluationDao.StudentOnlineEvaluationFraction(oid,tid);
+    }
+
+    @Override
+    public boolean insertOnlineEvaluation(Long eavaluationId, Long earnedId, Integer questionnaireId, Integer course_id,float score) {
+        int a = onlineEvaluationDao.insertOnlineEvaluation(eavaluationId,earnedId,questionnaireId,course_id,score);
+        if(a>0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

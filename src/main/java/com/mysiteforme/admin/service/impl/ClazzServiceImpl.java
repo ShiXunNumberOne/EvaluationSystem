@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import com.mysiteforme.admin.dao.ClazzDao;
 import com.mysiteforme.admin.dao.UserDao1;
 import com.mysiteforme.admin.entity.Clazz;
+import com.mysiteforme.admin.entity.Dept;
 import com.mysiteforme.admin.service.ClazzService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,14 @@ public class ClazzServiceImpl  extends ServiceImpl<ClazzDao, Clazz> implements C
 	public int deleteClazzById(int id) {
 		int c = baseMapper.deleteClazzById(id);
 		return c;
+	}
+
+	@Override
+	public int getCountByName(String name) {
+		EntityWrapper<Clazz> wrapper = new EntityWrapper<>();
+		wrapper.eq("status",1);
+		wrapper.eq("name",name);
+		return baseMapper.selectCount(wrapper);
 	}
 
 

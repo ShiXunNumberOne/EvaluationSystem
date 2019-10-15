@@ -216,6 +216,19 @@
                         id: data.id
                     },
                     success:function (res) {
+
+                        $.ajax({
+                            url:'${base}/admin/system/statistical/cc',
+                            type:'post',
+                            data:{
+                                batchId: data.id
+                            },
+                            success:function (res) {
+
+                                layer.msg(res.result);
+                                parent.location.reload();
+                            }
+                        });
                         layer.msg(res.result);
                         parent.location.reload();
                     }

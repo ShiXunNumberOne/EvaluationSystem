@@ -65,6 +65,9 @@ public class DeptController extends BaseController {
         if(StringUtils.isBlank(dept.getName())){
             return RestResponse.failure("班级名不能为空");
         }
+        if(deptService.getCountByName(dept.getName())>0){
+            return RestResponse.failure("学院已存在");
+        }
         deptService.saveDept(dept);
         if(dept.getId() == null || dept.getId() == 0){
             return RestResponse.failure("保存班级信息出错");
