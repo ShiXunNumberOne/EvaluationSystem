@@ -44,6 +44,11 @@ public class EtaskServiceImpl  extends ServiceImpl<EtaskDao, Etask> implements E
     }
 
     @Override
+    public int onoroffEtaskById(int id) {
+        return baseMapper.onoroffEtaskById(id);
+    }
+
+    @Override
     public int deleteEtaskById(int id) {
         int c = baseMapper.deleteEtaskById(id);
         return c;
@@ -51,13 +56,7 @@ public class EtaskServiceImpl  extends ServiceImpl<EtaskDao, Etask> implements E
 
     @Override
     public int openEtaskById(int id) {
-
         return baseMapper.openEtaskById(id);
-    }
-
-    @Override
-    public int closeEtaskById(int id) {
-        return baseMapper.closeEtaskById(id);
     }
 
     @Override
@@ -69,6 +68,17 @@ public class EtaskServiceImpl  extends ServiceImpl<EtaskDao, Etask> implements E
     public int endEtaskById(int id) {
         return baseMapper.endEtaskById(id);
     }
+
+    @Override
+    public int closeEtaskById(int id) {
+        return baseMapper.closeEtaskById(id);
+    }
+
+    @Override
+    public int SelectOpen() {
+        return baseMapper.SelectOpen();
+    }
+
 
 }
 

@@ -103,9 +103,23 @@ public class EtaskController extends BaseController {
         etaskService.updataEtaskById(etask);
         return RestResponse.success();
     }
+
+    @PostMapping("onoroff")
+    @ResponseBody
+    @SysLog("只能开启一个批次数据(单个)")
+    public int onoroffEtaskById(){
+        int ifOpen= etaskService.SelectOpen();
+        if(ifOpen != 0){
+            return 1;
+        }else {
+            return ifOpen;
+        }
+
+    }
+
     @PostMapping("delete")
     @ResponseBody
-    @SysLog("删除对战数据(单个)")
+    @SysLog("删除批次数据(单个)")
     public RestResponse delete(@RequestParam(value = "id",required = false)int id){
         if(id<=0){
             return RestResponse.failure("参数错误");
@@ -120,7 +134,7 @@ public class EtaskController extends BaseController {
 
     @PostMapping("open")
         @ResponseBody
-        @SysLog("删除对战数据(单个)")
+        @SysLog("开启批次数据(单个)")
         public RestResponse openEtaskById(@RequestParam(value = "id",required = false)int id){
             if(id<=0){
                 return RestResponse.failure("参数错误");
@@ -132,10 +146,12 @@ public class EtaskController extends BaseController {
             etaskService.openEtaskById(id);
             return RestResponse.success();
     }
-    @PostMapping("close")
+
+
+    @PostMapping("suspend")
     @ResponseBody
-    @SysLog("删除对战数据(单个)")
-    public RestResponse closeEtaskById(@RequestParam(value = "id",required = false)int id){
+    @SysLog("暂停批次数据(单个)")
+    public RestResponse suspendEtaskById(@RequestParam(value = "id",required = false)int id){
         if(id<=0){
             return RestResponse.failure("参数错误");
         }
@@ -143,13 +159,13 @@ public class EtaskController extends BaseController {
         if(etask == null){
             return RestResponse.failure("批次不存在");
         }
-        etaskService.closeEtaskById(id);
+        etaskService.suspendEtaskById(id);
         return RestResponse.success();
     }
 
     @PostMapping("end")
     @ResponseBody
-    @SysLog("删除对战数据(单个)")
+    @SysLog("结束批次数据(单个)")
     public RestResponse endEtaskById(@RequestParam(value = "id",required = false)int id){
         if(id<=0){
             return RestResponse.failure("参数错误");
@@ -162,10 +178,10 @@ public class EtaskController extends BaseController {
         return RestResponse.success();
     }
 
-    @PostMapping("suspend")
+    @PostMapping("close")
     @ResponseBody
     @SysLog("删除对战数据(单个)")
-    public RestResponse suspendEtaskById(@RequestParam(value = "id",required = false)int id){
+    public RestResponse closeEtaskById(@RequestParam(value = "id",required = false)int id){
         if(id<=0){
             return RestResponse.failure("参数错误");
         }
@@ -173,7 +189,7 @@ public class EtaskController extends BaseController {
         if(etask == null){
             return RestResponse.failure("批次不存在");
         }
-        etaskService.suspendEtaskById(id);
+        etaskService.closeEtaskById(id);
         return RestResponse.success();
     }
 }
