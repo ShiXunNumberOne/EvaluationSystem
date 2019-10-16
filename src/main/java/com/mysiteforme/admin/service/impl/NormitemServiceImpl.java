@@ -22,4 +22,10 @@ public class NormitemServiceImpl extends ServiceImpl<NormitemDao, Normitem> impl
         int n =baseMapper.insertNormitemsForeach(list);
         return n;
     }
+
+    @Override
+    public List<Normitem> selectByTargetId(Long normtargetId) {
+        return baseMapper.selectByTargetId(normtargetId);
+    }
+
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface NormitemService extends IService<Normitem> {
     Normitem saveNormitem(Normitem normitem);
     int insertNormitems(@Param("list") List<Normitem> list);
+    List<Normitem >selectByTargetId(Long normtargetId);
 }

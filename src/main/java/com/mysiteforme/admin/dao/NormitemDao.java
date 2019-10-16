@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface NormitemDao  extends BaseMapper<Normitem> {
    int insertNormitemsForeach(@Param("list") List<Normitem> list);
+   List<Normitem >selectByTargetId(Long normtargetId);
 }

@@ -12,8 +12,18 @@ public class Normtarget {
     private Long pid;         //父节点
     @TableField(value="sort")
     private Integer sort;  //排序码
+    @TableField(value="r_id")
+    private Long rid;
     private String name;
     private double entropy;  //权重
+
+    public Long getRid() {
+        return rid;
+    }
+
+    public void setRid(Long rid) {
+        this.rid = rid;
+    }
 
     @TableField(value="isNodelast")
     private Integer isNodelast;

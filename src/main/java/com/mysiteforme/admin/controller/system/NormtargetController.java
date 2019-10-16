@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
 import com.mysiteforme.admin.entity.Menu;
+import com.mysiteforme.admin.entity.Normitem;
 import com.mysiteforme.admin.entity.Normtarget;
 import com.mysiteforme.admin.entity.VO.NtreeVO;
 import com.mysiteforme.admin.entity.VO.ZtreeVO;
@@ -100,38 +101,29 @@ public class NormtargetController extends BaseController {
 
     @GetMapping("edit")
     public String edit(Long id,Model model){
-        Menu menu = menuService.selectById(id);
-        model.addAttribute("menu",menu);
-        return "admin/system/menu/edit";
+        Normtarget normtarget = normtargetService.selectById(id);
+        List<Normitem> normitems = normitemService.selectByTargetId(id);
+        model.addAttribute("normtarget",normtarget);
+        model.addAttribute("normitems",normitems);
+        return "admin/system/normtarget/edit";
     }
 
     @PostMapping("edit")
     @ResponseBody
     @SysLog("保存编辑菜单数据")
-    public RestResponse edit(Menu menu){
-        if(menu.getId() == null){
+    public RestResponse edit(Normtarget normtarget){
+        if(normtarget.getId() == null){
             return RestResponse.failure("菜单ID不能为空");
         }
-        if (StringUtils.isBlank(menu.getName())) {
+        if (StringUtils.isBlank(normtarget.getName())) {
             return RestResponse.failure("菜单名称不能为空");
         }
-        Menu oldMenu = menuService.selectById(menu.getId());
-        if(!oldMenu.getName().equals(menu.getName())) {
-            if(menuService.getCountByName(menu.getName())>0){
-                return RestResponse.failure("菜单名称已存在");
-            }
-        }
-        if (StringUtils.isNotBlank(menu.getPermission())) {
-            if(!oldMenu.getPermission().equals(menu.getPermission())) {
-                if (menuService.getCountByPermission(menu.getPermission()) > 0) {
-                    return RestResponse.failure("权限标识已经存在");
-                }
-            }
-        }
-        if(menu.getSort() == null){
+
+
+        if(normtarget.getSort() == null){
             return RestResponse.failure("排序值不能为空");
         }
-        menuService.saveOrUpdateMenu(menu);
+        normtargetService.saveOrUpdateNormtarget(normtarget);
         return RestResponse.success();
     }
 

@@ -87,7 +87,7 @@
         <div class="layui-form-item" >
             <label class="layui-form-label">角色</label>
             <div class="layui-input-block">
-                <select name="r_id" id="role"  lay-search>
+                <select name="rid" id="role"  lay-search>
                     <option value="">请选择角色</option>
                 </select>
             </div>

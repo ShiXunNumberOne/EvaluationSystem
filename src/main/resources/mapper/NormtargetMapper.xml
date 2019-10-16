@@ -9,6 +9,7 @@
         <result property="pid" column="pid"/>
         <result property="sort" column="sort"/>
         <result property="level" column="level"/>
+        <result property="rid" column="r_id"/>
         <result property="entropy" column="entropy"/>
         <result property="isNodelast" column="isNodelast"/>
         <result property="isShow" column="isShow"/>

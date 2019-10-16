@@ -15,7 +15,4 @@ public interface EtaskDao extends BaseMapper<Etask> {
     int closeEtaskById(int id);
     int suspendEtaskById(int id);
     int endEtaskById(int id);
-    int onoroffEtaskById(int id);
-//     <!--查询处在开启状态的批次数量-->
-    int SelectOpen();
 }

@@ -22,4 +22,7 @@
             (#{item.name},#{item.score},#{item.normtargetId})
         </foreach>
     </insert>
+    <select id="selectByTargetId" resultType="hashmap" >
+        select * from normitem where normtarget_id=#{normtargetId}
+    </select>
 </mapper>
