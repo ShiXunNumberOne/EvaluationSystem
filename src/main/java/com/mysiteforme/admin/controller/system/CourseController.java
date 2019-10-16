@@ -39,6 +39,7 @@ public class CourseController extends BaseController {
         Map map = WebUtils.getParametersStartingWith(request, "s_");
         LayerData<Course> courseLayerData = new LayerData<>();
         EntityWrapper<Course> courseEntityWrapper = new EntityWrapper<>();
+        courseEntityWrapper.eq("status","1");
         if(!map.isEmpty()){
             String keys = (String) map.get("key");
             if(StringUtils.isNotBlank(keys)) {
@@ -97,6 +98,9 @@ public HashMap  queryCourses(){
     public RestResponse add(@RequestBody  Course course){
         if(StringUtils.isBlank(course.getName())){
             return RestResponse.failure("课程名不能为空");
+        }
+        if(courseService.getCountByName(course.getCode())>0){
+            return RestResponse.failure("课程已存在");
         }
         courseService.saveCourse(course);
         if(course.getId() == null || course.getId() == 0){

@@ -37,19 +37,40 @@
 <div class="layui-form users_list">
     <table class="layui-table" id="test" lay-filter="demo"></table>
 
-    <script type="text/html" id="etaskStatus">
+    <script type="text/html" id="barDemo">
         <!-- 这里的 checked 的状态只是演示 -->
-        {{#  if(d.status == 1){ }}
-        <span class="layui-badge layui-bg-green">正在评教</span>
-        {{#  } else { }}
-        <span class="layui-badge layui-bg-gray">未开启</span>
+        <#--{{#  if(d.status == 1){ }}-->
+        <#--<span class="layui-badge layui-bg-green">正在评教</span>-->
+        <#--{{#  } else { }}-->
+        <#--<span class="layui-badge layui-bg-gray">未开启</span>-->
+        <#--{{#  } }}-->
+        {{#  if(d.status == 0){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="open">开启</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+        {{#  } else if(d.status == 1){ }}
+        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="suspend">暂停</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="end">结束</a>
+        {{#  } else if(d.status == 2){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="open">开启</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="end">结束</a>
+        {{#  } else if(d.status == 3){ }}
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="look">查看分数</a>
         {{#  } }}
     </script>
-    <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">开启</a>
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">关闭</a>
+    <script type="text/html" id="etaskStatus">
+        <#--<a class="layui-btn layui-btn-xs" lay-event="edit">开启</a>-->
+        <#--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+        <#--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+        <#--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">关闭</a>-->
+        {{#  if(d.status == 1){ }}
+        <button type="button" class="layui-btn layui-btn-sm" disabled="disabled">开启中</button>
+        {{#  } else if(d.status == 0){ }}
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" disabled="disabled">未开启</button>
+        {{#  }else if(d.status == 2){ }}
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-warm" disabled="disabled">暂停中</button>
+        {{#  }else if(d.status == 3){ }}
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" disabled="disabled">已结束</button>
+        {{#  } }}
     </script>
 </div>
 <div id="page"></div>
@@ -62,7 +83,15 @@
                 form = layui.form,
                 table = layui.table,
                 t;                  //表格数据变量
-
+//重构函数
+        function batchRelode(){
+            table.reload('demo', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                url:"${base}/admin/system/etask/list"
+            }, 't');
+        }
         t = {
             elem: '#test',
             url:'${base}/admin/system/etask/list',
@@ -87,7 +116,6 @@
             ]],
         };
         table.render(t);
-
         //监听工具条
         table.on('tool(demo)', function(obj){
             var data = obj.data;
@@ -110,21 +138,83 @@
                 });
                 layer.full(editIndex);
             }
-            if(obj.event === "del"){
-                layer.confirm("你确定要删除该批次么？",{btn:['是的,我确定','我再想想']},
-                    function(){
-                        $.post("${base}/admin/system/etask/delete",{"id":data.id},function (res){
-                           if(res.success){
-                               layer.msg("删除成功",{time: 1000},function(){
-                                   table.reload('test', t);
-                               });
-                           }else{
-                               layer.msg(res.message);
-                           }
+            <#--if(obj.event === "del"){-->
+                <#--layer.confirm("你确定要删除该批次么？",{btn:['是的,我确定','我再想想']},-->
+                    <#--function(){-->
+                        <#--$.post("${base}/admin/system/etask/delete",{"id":data.id},function (res){-->
+                           <#--if(res.success){-->
+                               <#--layer.msg("删除成功",{time: 1000},function(){-->
+                                   <#--table.reload('test', t);-->
+                               <#--});-->
+                           <#--}else{-->
+                               <#--layer.msg(res.message);-->
+                           <#--}-->
 
-                        });
+                        <#--});-->
+                    <#--}-->
+                <#--)-->
+            <#--}-->
+            if(obj.event  === 'open'){ //开启按钮
+                $.ajax({
+                    url:'${base}/admin/system/etask/open',
+                    type:'post',
+                    data:{
+                        id: data.id
+                    },
+                    success:function (res) {
+                        layer.msg(res.result);
+                        parent.location.reload();
                     }
-                )
+                })
+            } else if(obj.event  === 'suspend'){ //暂停
+                $.ajax({
+                    url:'${base}/admin/system/etask/suspend',
+                    type:'post',
+                    data:{
+                        id: data.id
+                    },
+                    success:function (res) {
+                        layer.msg(res.result);
+                        parent.location.reload();
+                    }
+                })
+            } else if(obj.event  === 'end'){ //结束
+                $.ajax({
+                    url:'${base}/admin/system/etask/end',
+                    type:'post',
+                    data:{
+                        id: data.id
+                    },
+                    success:function (res) {
+
+                        $.ajax({
+                            url:'${base}/admin/system/statistical/cc',
+                            type:'post',
+                            data:{
+                                batchId: data.id
+                            },
+                            success:function (res) {
+
+                                layer.msg(res.result);
+                                parent.location.reload();
+                            }
+                        });
+                        layer.msg(res.result);
+                        parent.location.reload();
+                    }
+                })
+            } else if(obj.event  === 'delete'){ //删除
+                $.ajax({
+                    url:'${base}/admin/system/etask/delete',
+                    type:'post',
+                    data:{
+                        id: data.id
+                    },
+                    success:function (res) {
+                        layer.msg(res.result);
+                        parent.location.reload();
+                    }
+                })
             }
         });
 

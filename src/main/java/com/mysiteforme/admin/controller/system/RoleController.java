@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mysiteforme.admin.annotation.SysLog;
 import com.mysiteforme.admin.base.BaseController;
+import com.mysiteforme.admin.entity.Course;
 import com.mysiteforme.admin.entity.Menu;
 import com.mysiteforme.admin.entity.Role;
 import com.mysiteforme.admin.entity.User;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -81,7 +83,17 @@ public class RoleController extends BaseController{
         }
         return roles;
     }
-
+    @GetMapping("queryRole")
+    @ResponseBody
+    public HashMap queryCourses(){
+        HashMap result = new HashMap();
+        List<Role> courseList = roleService.selectAll();
+        result.put("code",0);
+        result.put("msg","");
+        result.put("count",courseList.size());
+        result.put("data",courseList);
+        return result;
+    }
     @GetMapping("add")
     public String add(Model model){
         Map<String,Object> map = Maps.newHashMap();

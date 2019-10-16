@@ -33,6 +33,6 @@ update course
 where id=#{id}
 </update>
 <delete id="deleteCourseById" parameterType="java.util.Map">
-        delete from course where id=#{id}
+        update Course set  status=0 where id=#{id}
     </delete>
 </mapper>

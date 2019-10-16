@@ -19,8 +19,18 @@ public class Etask{
     @TableField(value = "end_data", fill = FieldFill.INSERT)
     private Date endData;
     private Integer status;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Boolean flag;
+
+    public Boolean getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Boolean flag) {
+        this.flag = flag;
+    }
+
+    //    @DateTimeFormat(pattern = "y-M-d")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "y-M-d",timezone = "GMT+8")
     public Date getStartData() {
         return startData;
     }
@@ -28,8 +38,8 @@ public class Etask{
     public void setStartData(Date startData) {
         this.startData = startData;
     }
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = "GMT+8")
+//    @DateTimeFormat(pattern = "y-M-d")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "y-M-d",timezone = "GMT+8")
     public Date getEndData() {
         return endData;
     }

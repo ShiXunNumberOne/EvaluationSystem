@@ -78,7 +78,7 @@ public class MenuController extends BaseController{
                 return RestResponse.failure("权限标识已经存在");
             }
         }
-        if(menu.getParentId() == null){
+        if(menu.getParentId()== null){
             menu.setLevel(1);
             Object o = menuService.selectObj(Condition.create().setSqlSelect("max(sort)").isNull("parent_id"));
             int sort = 0;

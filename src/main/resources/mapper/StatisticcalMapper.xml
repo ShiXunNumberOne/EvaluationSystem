@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mysiteforme.admin.dao.StatisticcalDao">
+    <resultMap id="scoreResultMap" type="com.mysiteforme.admin.entity.GradScore">
+        <id column="id" property="id"></id>
+        <result column="eavalualuationId" property="eavalualuationId"></result>
+        <result column="earnedId" property="earnedId"></result>
+        <result column="questionnaireId" property="questionnaireId"></result>
+        <result column="course_id" property="course_id"></result>
+        <result column="score" property="score"></result>
+    </resultMap>
+    <!-- 整理流水表信息-->
+    <select id="clearUpScore" parameterType="hashmap" resultMap="scoreResultMap">
+   SELECT
+      gr.id as gid,
+      gr.score,
+      gr.earnedId,
+      gr.eavaluationId,
+      r.name as rname ,
+      u.id as uid ,
+      ek.id as eid,
+      gr.course_id as cid
+    FROM
+      grad_score gr
+      LEFT JOIN etask ek
+        ON gr.questionnaireId = ek.id
+      LEFT JOIN sys_user u
+        ON u.id = gr.earnedId
+      LEFT JOIN sys_user uu
+        ON uu.id = gr.eavaluationId
+      LEFT JOIN sys_user_role ur
+        ON ur.user_id = uu.id
+      LEFT JOIN sys_role r
+        ON r.id = ur.role_id
+    WHERE u.del_flag != 1
+      AND uu.del_flag != 1
+      AND ek.status = 3
+      AND ek.flag != 0
+      AND ek.id =  #{batchId}
+    </select>
+
+    <!--查询所有参加评教老师-->
+    <select id="queryTeacherStats" parameterType="hashmap" resultType="hashmap">
+   SELECT
+      gr.earnedId
+    FROM
+      grad_score gr
+      LEFT JOIN etask ek
+        ON gr.questionnaireId = ek.id
+    WHERE ek.id =  #{batchId}
+    GROUP BY gr.earnedId
+     </select>
+    <!--查询评教老师评教的科目-->
+    <select id="queryTeacherCourse" parameterType="hashmap" resultType="hashmap">
+    SELECT
+      f.`courses_id`
+    FROM
+      fraction f
+      LEFT JOIN papers p
+        ON p.`papers_id` = f.`papers_id`
+      LEFT JOIN batch b
+        ON b.`batch_id` = p.`batch_id`
+    WHERE b.`batch_id` = #{batchId}
+      AND f.`gradeds` = #{gradeds}
+      AND f.`papers_id` = #{papersId}
+    GROUP BY f.`courses_id`
+    </select>
+
+
+    <!--批量插入成绩-->
+    <insert id="insertBatchScore" parameterType="java.util.List">
+        INSERT INTO eresult (
+        teacher_id,
+        score,
+        etask_id,
+        `self_score`,
+        teacher_score,
+        student_score,
+        teacher_count,
+        student_count
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.teacher_Id},
+            #{item.score},
+            #{item.etask_id},
+            #{item.self_score},
+            #{item.teahcer_score},
+            #{item.student_score},
+            #{item.teahcer_count},
+            #{item.student_count}
+            )
+        </foreach>
+    </insert>
+
+    <!--统计参与评教学院-->
+    <select id="queryScoreDepartment" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        d.id,
+        d.name,
+        COUNT(d.id)
+        FROM
+        ERESULT et
+        LEFT JOIN sys_user u
+        ON u.id = et.teacher_id
+        LEFT JOIN dept d
+        ON d.id = u.dept_id
+        <where>
+            <if test=" batchId != null ">AND et.etask_id=#{batchId}</if>
+        </where>
+        GROUP BY d.id
+    </select>
+    <!--查询批次下的所有问卷-->
+    <select id="queryPapers" parameterType="hashmap" resultType="hashmap" >
+        SELECT DISTINCT
+        *
+        FROM
+        grad_score gc
+        LEFT JOIN etask ek
+        ON gc.`questionnaireId` = ek.id
+        WHERE
+         ek.flag != 0
+        AND ek.status = 3
+        AND ek.id=#{batchId}
+    </select>
+
+    <!--查询参与评教老师-->
+    <select id="queryScoreTeacher"  parameterType="hashmap" resultType="hashmap">
+        SELECT DISTINCT
+        gs.`earnedId`,
+        gs.`course_id`,
+        ek.id
+        FROM
+        grad_score gs
+        LEFT JOIN etask ek
+        ON gs.`questionnaireId` = ek.id
+        <where>
+            <if test=" batchId != null ">AND ek.id=#{batchId}</if>
+        </where>
+    </select>
+
+    <!--查询评价人数-->
+    <select id="queryScoreMan"  parameterType="hashmap" resultType="hashmap">
+        SELECT DISTINCT
+        gs.eavaluationId,
+        ek.id
+        FROM
+        grad_score gs
+        LEFT JOIN etask ek
+        ON gs.`questionnaireId` = ek.id
+        <where>
+            <if test=" batchId != null ">AND ek.id=#{batchId}</if>
+        </where>
+    </select>
+    <!--查询老师评价高于平均分的老师-->
+    <select id="queryAverageTeacherDayu" parameterType="hashmap" resultType="hashmap" >
+        SELECT
+        *
+        FROM
+        ERESULT et
+        WHERE score >
+        (SELECT
+        AVG(score)
+        FROM
+        ERESULT)
+        <if test=" batchId != null ">AND et.etask_id=#{batchId}</if>
+    </select>
+
+    <!--生成评教质量好坏饼图优秀-->
+    <select id="queryTeacherDaYu90" parameterType="hashmap" resultType="hashmap" >
+        SELECT
+        *
+        FROM
+        ERESULT et
+        WHERE et.score >90
+        <if test=" batchId != null ">AND et.etask_id=#{batchId}</if>
+    </select>
+
+    <!--生成评教质量好坏饼图中等-->
+    <select id="queryTeacherDaYu60XiaoYu90" parameterType="hashmap" resultType="hashmap" >
+        SELECT
+        *
+        FROM
+        ERESULT et
+        WHERE et.score BETWEEN 60 and 90
+        <if test=" batchId != null ">AND et.etask_id=#{batchId}</if>
+    </select>
+
+    <!--生成评教质量好坏饼图差-->
+    <select id="queryTeacherXiaoyu60" parameterType="hashmap" resultType="hashmap" >
+        SELECT
+        *
+        FROM
+        eresult
+        WHERE score &lt;60
+        <if test=" batchId != null ">AND etask_id=#{batchId}</if>
+    </select>
+    <!--查询批次-->
+    <select id="queryBatchsList" parameterType="hashmap" resultType="hashmap" >
+        SELECT
+        *
+        FROM
+        etask ek
+        WHERE
+        ek.status=3
+        AND ek.flag = 1
+        GROUP BY ek.id
+    </select>
+
+    <!--取评教成绩前5-->
+    <select id="querySocoreLimit5" parameterType="hashmap" resultType="hashmap" >
+        SELECT
+        et.id,et.score,u.nick_name as uname,et.student_score,et.self_score, et.teacher_score,et.teacher_id
+        FROM
+        ERESULT et
+        LEFT JOIN etask ek
+        ON et.etask_id = ek.id
+        LEFT JOIN sys_user u
+        ON u.id = et.teacher_id
+        <where>
+            <if test=" batchId != null ">AND ek.id=#{batchId}</if>
+        </where>
+        ORDER BY score DESC
+        LIMIT 0, 3
+    </select>
+
+    <!--  查询成绩  -->
+    <select id="querySocore" parameterType="hashmap" resultType="hashmap" >
+        SELECT
+        et.id,et.score,u.nick_name as uname,et.student_score, et.teacher_score,et.teacher_id,et.self_score
+        FROM
+        ERESULT et
+        LEFT JOIN etask ek
+        ON et.etask_id = ek.id
+        LEFT JOIN sys_user u
+        ON u.id = et.teacher_id
+        <where>
+            <if test=" batchId != null ">AND ek.id=#{batchId}</if>
+        </where>
+        ORDER BY score DESC
+        LIMIT ${page},${limit}
+    </select>
+
+    <select id="queryScoreSize" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        *
+        FROM
+        ERESULT et
+        LEFT JOIN etask ek
+        ON et.etask_id = ek.id
+        LEFT JOIN sys_user u
+        ON u.id = et.teacher_id
+        <where>
+            <if test=" batchId != null ">AND ek.id=#{batchId}</if>
+        </where>
+    </select>
+
+    <!--查询某老师 课程成绩-->
+    <select id="queryTeacherScore" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        u.`user_id`,
+        u.`user_name`,
+        f.`fractions` ,
+        f.`courses_id`,
+        c.`courses_name`,
+        r.`role_name`,
+        f.`papers_id`,
+        b.`batch_id`
+        FROM
+        fraction f
+        LEFT JOIN USER u
+        ON u.`user_id` = f.`gradeds`
+        LEFT JOIN papers p
+        ON p.`papers_id` = f.`papers_id`
+        LEFT JOIN batch b
+        ON b.`batch_id` = p.`batch_id`
+        LEFT JOIN courses c
+        ON c.`courses_id` = f.`courses_id`
+        LEFT JOIN userrole ur ON
+        ur.`user_id` = u.`user_id`
+        LEFT JOIN role r
+        ON r.`role_id` =ur.`role_id`
+        WHERE f.`gradeds` = #{gradeds}
+        <if test=" batchId != null ">AND b.batch_Id=#{batchId}</if>
+        <if test=" papersId != null ">AND p.papers_id=#{papersId}</if>
+        LIMIT ${page},${limit}
+    </select>
+
+    <select id="queryTeacherScoreSize" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        *
+        FROM
+        scores s
+        LEFT JOIN batch b
+        ON b.`batch_id` = s.`batch_id`
+        LEFT JOIN papers p
+        ON p.`papers_id` = s.`papers_id`
+        LEFT JOIN USER u
+        ON u.`user_id` = s.`gradeds`
+        WHERE s.`gradeds` = #{gradeds}
+        <if test=" batchId != null ">AND b.batch_Id=#{batchId}</if>
+        <if test=" papersId != null ">AND p.papers_id=#{papersId}</if>
+    </select>
+
+    <select id="queryTeacherScoreList" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        f.`courses_id`
+        FROM
+        fraction f
+        LEFT JOIN USER u
+        ON u.`user_id` = f.`gradeds`
+        LEFT JOIN papers p
+        ON p.`papers_id` = f.`papers_id`
+        LEFT JOIN batch b
+        ON b.`batch_id` = p.`batch_id`
+        LEFT JOIN courses c
+        ON c.`courses_id` = f.`courses_id`
+        LEFT JOIN userrole ur ON
+        ur.`user_id` = u.`user_id`
+        LEFT JOIN role r
+        ON r.`role_id` =ur.`role_id`
+        WHERE f.`gradeds` = #{gradeds}
+        <if test=" batchId != null ">AND b.batch_Id=#{batchId}</if>
+        <if test=" papersId != null ">AND p.papers_id=#{papersId}</if>
+        GROUP BY f.`courses_id`
+    </select>
+    <!--查询被评分人具体评教详情-->
+    <select id="querydetail" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        u.`user_id`,
+        u.`user_name`,
+        r.`role_name`,
+        uu.`user_id`,
+        uu.`user_name`,
+        f.`fractions`,
+        f.`papers_id`,
+        f.`courses_id`
+        FROM
+        fraction f
+        LEFT JOIN USER u
+        ON u.`user_id` = f.`papers_id`
+        LEFT JOIN USER uu
+        ON uu.`user_id` = f.`gradeds`
+        LEFT JOIN userrole ur
+        ON ur.`user_id` = u.`user_id`
+        LEFT JOIN role r
+        ON r.`role_id` = ur.`role_id`
+        WHERE f.`gradeds` = #{gradeds}
+        AND f.`courses_id` = #{courses_id}
+        <if test=" batchId != null ">AND f.batch_Id=#{batchId}</if>
+        <if test=" papersId != null ">AND f.papers_id=#{papersId}</if>
+        LIMIT ${page},${limit}
+    </select>
+
+    <select id="querydetailSize" parameterType="hashmap" resultType="hashmap">
+        SELECT
+        u.`user_id`,
+        u.`user_name`,
+        r.`role_name`,
+        uu.`user_id`,
+        uu.`user_name`,
+        f.`fractions`,
+        f.`papers_id`,
+        f.`courses_id`
+        FROM
+        fraction f
+        LEFT JOIN USER u
+        ON u.`user_id` = f.`papers_id`
+        LEFT JOIN USER uu
+        ON uu.`user_id` = f.`gradeds`
+        LEFT JOIN userrole ur
+        ON ur.`user_id` = u.`user_id`
+        LEFT JOIN role r
+        ON r.`role_id` = ur.`role_id`
+        WHERE f.`gradeds` = #{gradeds}
+        AND f.`courses_id` = #{courses_id}
+        <if test=" batchId != null ">AND f.batch_Id=#{batchId}</if>
+        <if test=" papersId != null ">AND f.papers_id=#{papersId}</if>
+    </select>
+</mapper>

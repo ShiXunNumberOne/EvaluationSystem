@@ -5,13 +5,27 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldStrategy;
 
 import java.util.List;
-@TableName("nomtarget")
+@TableName("normtarget")
 public class Normtarget {
+    private static final long serialVersionUID = 1L;
     private Long id;
-    private long pid;         //父节点
-    private Integer sortCode;  //排序码
+    private Long pid;         //父节点
+    @TableField(value="sort")
+    private Integer sort;  //排序码
+    @TableField(value="r_id")
+    private Long rid;
     private String name;
-    private double entropy;
+    private double entropy;  //权重
+
+    public Long getRid() {
+        return rid;
+    }
+
+    public void setRid(Long rid) {
+        this.rid = rid;
+    }
+
+    @TableField(value="isNodelast")
     private Integer isNodelast;
     private Integer status;
     /**
@@ -29,9 +43,22 @@ public class Normtarget {
     @TableField(value="is_show",strategy= FieldStrategy.IGNORED)
     private Boolean isShow;
 
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Boolean getShow() {
+        return isShow;
+    }
+
+    public void setShow(Boolean show) {
+        isShow = show;
+    }
+
     public Normtarget() {
-        super();
-        this.sortCode = 30;
+            super();
+          this.sort = 30;
     }
     public Boolean getIsShow() {
         return isShow;
@@ -74,20 +101,20 @@ public class Normtarget {
         this.parentTree = parentTree;
     }
 
-    public long getPid() {
+    public Long getPid() {
         return pid;
     }
 
-    public void setPid(long pid) {
+    public void setPid(Long pid) {
         this.pid = pid;
     }
 
-    public Integer getSortCode() {
-        return sortCode;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setSortCode(Integer sortCode) {
-        this.sortCode = sortCode;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public String getName() {

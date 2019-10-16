@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mysiteforme.admin.dao.QuestionnaireDao">
+    <resultMap id="evaluationMap" type="com.mysiteforme.admin.entity.VO.IndexOptionVO">
+        <!--<id property="tid" column="id"></id>-->
+        <!--<result property="tname" column="name"></result>-->
+        <!--<result property="oname" column="name"></result>-->
+        <!--<result property="oid" column="id"></result>-->
+    </resultMap>
+    <!--生成学生试卷-->
+    <select id="selectOnlineEvaluation" resultMap="evaluationMap">
+       select nt.entropy,nt.id as tid,nt.name as tname,nm.name as oname,nm.id as oid,nm.score from
+           normtarget nt
+          left join normitem nm on nt.id=nm.normtarget_id
+					LEFT JOIN sys_role sr on nt.r_id=sr.id
+        where sr.name="学生" AND nt.pid!=''
+    </select>
+    <!--生成同行试卷-->
+    <select id="selectColleagueOnlineEvaluation" resultMap="evaluationMap">
+       select nt.entropy,nt.id as tid,nt.name as tname,nm.name as oname,nm.id as oid,nm.score from
+           normtarget nt
+          left join normitem nm on nt.id=nm.normtarget_id
+					LEFT JOIN sys_role sr on nt.r_id=sr.id
+        where sr.name="教师" AND nt.pid=26 AND nt.pid!=''
+    </select>
+    <!--生成自我试卷-->
+    <select id="selectOneselfOnlineEvaluation" resultMap="evaluationMap">
+       select nt.entropy,nt.id as tid,nt.name as tname,nm.name as oname,nm.id as oid,nm.score from
+           normtarget nt
+          left join normitem nm on nt.id=nm.normtarget_id
+					LEFT JOIN sys_role sr on nt.r_id=sr.id
+        where sr.name="教师" AND nt.pid=13 AND nt.pid!=''
+    </select>
+</mapper>

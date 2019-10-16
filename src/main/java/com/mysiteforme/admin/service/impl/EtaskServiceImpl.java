@@ -49,6 +49,26 @@ public class EtaskServiceImpl  extends ServiceImpl<EtaskDao, Etask> implements E
         return c;
     }
 
+    @Override
+    public int openEtaskById(int id) {
+
+        return baseMapper.openEtaskById(id);
+    }
+
+    @Override
+    public int closeEtaskById(int id) {
+        return baseMapper.closeEtaskById(id);
+    }
+
+    @Override
+    public int suspendEtaskById(int id) {
+        return baseMapper.suspendEtaskById(id);
+    }
+
+    @Override
+    public int endEtaskById(int id) {
+        return baseMapper.endEtaskById(id);
+    }
 
 }
 
