@@ -256,8 +256,8 @@
                 var scoreData = [];
                 for (var i = 0;i<result.length;i++){
                     xList.push(result[i].uname)
-                    teacherData.push(result[i].student_score)
-                    studentData.push(result[i].teacher_score)
+                    teacherData.push(result[i].teacher_score)
+                    studentData.push(result[i].student_score)
                     selfData.push(result[i].self_score)
                     scoreData.push(result[i].score)
                 }

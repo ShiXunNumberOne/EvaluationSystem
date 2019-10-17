@@ -16,14 +16,14 @@
 </head>
 <body class="childrenBody">
 <!--搜索框-->
-<div class="demoTable">
-    批次:
-    <div class="layui-form layui-inline" style="width: 200px">
-        <select id="batch_name" name="batch_name"  lay-search>
-            <option value=""></option>
-        </select>
-    </div>
-</div>
+<#--<div class="demoTable">-->
+    <#--批次:-->
+    <#--<div class="layui-form layui-inline" style="width: 200px">-->
+        <#--<select id="batch_name" name="batch_name"  lay-search>-->
+            <#--<option value=""></option>-->
+        <#--</select>-->
+    <#--</div>-->
+<#--</div>-->
 <!--动态生成批次下拉框-->
 <script>
     layui.use(['form', 'upload', 'layer','table'], function () {

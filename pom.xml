@@ -272,7 +272,6 @@
 			<artifactId>ik-analyzers</artifactId>
 			<version>5.1.0</version>
 		</dependency>
-
 		<!--MMSeg4j 分词器-->
 		<dependency>
 			<groupId>com.chenlb.mmseg4j</groupId>

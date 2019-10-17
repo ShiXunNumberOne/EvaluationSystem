@@ -6,7 +6,7 @@ server:
 spring:
   #激活哪一个环境的配置文件
   profiles:
-    active: dev
+    active: test
   #视图配置
   mvc:
     static-path-pattern: /static/**
