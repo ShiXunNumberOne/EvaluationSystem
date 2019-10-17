@@ -176,4 +176,15 @@ public class EtaskController extends BaseController {
         etaskService.suspendEtaskById(id);
         return RestResponse.success();
     }
+    @PostMapping("onoroff")
+    @ResponseBody
+    @SysLog("只能开启一个批次数据(单个)")
+    public int onoroffEtaskById() {
+        int ifOpen = etaskService.SelectOpen();
+        if (ifOpen != 0) {
+            return 1;
+        } else {
+            return ifOpen;
+        }
+    }
 }

@@ -79,7 +79,7 @@
             <label class="layui-form-label">角色</label>
             <div class="layui-input-block">
                 <select name="r_id" id="role"  lay-search>
-                    <option value="  ">${normtarget.rid}</option>
+                    <option value=" "></option>
                 </select>
             </div>
         </div>
@@ -140,17 +140,24 @@
 <script type="text/javascript" src="${base}/static/colorpicker/colpick.js"></script>
 <script>
     layui.use(['form','jquery','layer'],function(){
+
         var form = layui.form,
             layer = layui.layer;
         $    = layui.jquery;
+
+
         $.ajax({
             url: '${base}/admin/system/role/queryRole',
             dataType: 'json',
             type: 'get',
             success: function (data) {
+
                 $.each(data.data, function (index,item) {
+                    console.log("角色姓名:"+item.name)
+                    console.log("角色ID:"+item.id)
                     $('#role').append(new Option(item.name,item.id));// 下拉菜单里添加元素
                 });
+                $("#role option[value='${normtarget.rid}']").prop("selected",true);
                 layui.form.render("select");
             }
         });

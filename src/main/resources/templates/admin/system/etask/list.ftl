@@ -54,7 +54,7 @@
         <a class="layui-btn layui-btn-xs" lay-event="open">开启</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="end">结束</a>
         {{#  } else if(d.status == 3){ }}
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="look">查看分数</a>
+        <#--<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="look">查看分数</a>-->
         {{#  } }}
     </script>
     <script type="text/html" id="etaskStatus">
@@ -155,18 +155,31 @@
                 <#--)-->
             <#--}-->
             if(obj.event  === 'open'){ //开启按钮
-                $.ajax({
-                    url:'${base}/admin/system/etask/open',
+                $. ajax({
+                    url:'${base}/admin/system/etask/onoroff',
                     type:'post',
-                    data:{
-                        id: data.id
-                    },
-                    success:function (res) {
-                        layer.msg(res.result);
-                        parent.location.reload();
+                    data:{},
+                    success:function(res) {
+                        if (res == 1) {
+                            //当有批次已经在开启中
+                            layer.msg('当前已有批次在开启中，请先暂停或结束已开启批次! ');
+                        } else {
+                            $.ajax({
+                                url: '${base}/admin/system/etask/open',
+                                type: 'post',
+                                data: {
+                                    id: data.id
+                                },
+                                success: function (res) {
+                                    layer.msg(res.result);
+                                    parent.location.reload();
+                                }
+                            })
+                        }
                     }
                 })
-            } else if(obj.event  === 'suspend'){ //暂停
+            }
+             else if(obj.event  === 'suspend'){ //暂停
                 $.ajax({
                     url:'${base}/admin/system/etask/suspend',
                     type:'post',

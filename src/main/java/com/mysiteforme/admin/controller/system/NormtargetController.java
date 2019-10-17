@@ -31,7 +31,12 @@ public class NormtargetController extends BaseController {
     @GetMapping("list")
     @SysLog("跳转菜单列表")
     public String list(Model model){
-        return "admin/system/normtarget/test";
+        int ifOpen = etaskService.SelectOpen();
+        if(ifOpen!=0){
+            return "admin/system/normtarget/list";
+        }else {
+            return "admin/system/normtarget/test";
+        }
     }
 
     @PostMapping("tree")
@@ -105,6 +110,7 @@ public class NormtargetController extends BaseController {
         List<Normitem> normitems = normitemService.selectByTargetId(id);
         model.addAttribute("normtarget",normtarget);
         model.addAttribute("normitems",normitems);
+        System.out.println(normtarget.getRid());
         return "admin/system/normtarget/edit";
     }
 
@@ -123,11 +129,10 @@ public class NormtargetController extends BaseController {
         if(normtarget.getSort() == null){
             return RestResponse.failure("排序值不能为空");
         }
-        normtargetService.saveOrUpdateNormtarget(normtarget);
+        normtargetService.updateNormtarget(normtarget);
         return RestResponse.success();
     }
 
-    @RequiresPermissions("sys:menu:delete")
     @PostMapping("delete")
     @ResponseBody
     @SysLog("删除菜单")

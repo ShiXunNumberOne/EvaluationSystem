@@ -47,4 +47,12 @@
         update etask set status=2  where id=#{id}
     </update>
 
+    <!--查询处在开启状态的批次数量-->
+    <select id="SelectOpen" resultType="int">
+        select count(*) from etask where status=1
+    </select>
+
+    <update id="onoroffEtaskById" parameterType="java.util.Map">
+        update  etask set status=1 where id=#{id}
+    </update>
 </mapper>

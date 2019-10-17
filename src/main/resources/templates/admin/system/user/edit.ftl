@@ -84,7 +84,7 @@
         <label class="layui-form-label">学院</label>
         <div class="layui-input-block">
             <select name="dept_id" id="dept" lay-filter="dept" lay-verify="required" lay-search>
-                <option value="">请选择学院</option>
+                <option value="">${localuser.deptId}</option>
             </select>
         </div>
     </div>
@@ -118,7 +118,50 @@
                 $    = layui.jquery,
                 layer = layui.layer,
                 delFlage = ${localuser.delFlag?string};
+        $.ajax({
+            url: '${base}/admin/system/clazz/queryDept',
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+                $.each(data.data, function (index,item) {
+                    $('#dept').append(new Option(item.name,item.id));// 下拉菜单里添加元素
+                });
+                $("#dept option[value='${localuser.dept_id}']").prop("selected",true);
+                layui.form.render("select");
+            }
+        })
 
+        //角色下拉框change事件，判断是否为学生显示班级
+        form.on('checkbox', function(data){
+            console.log(data.value);
+            if('${role.id}'==1 || '${role.id}'==2){
+                $('#changeClass').css("display","none")
+            }else{
+                $('#changeClass').css("display","block")
+            }
+        });
+        //选择院系，得到班级
+        form.on('select(dept)', function(data) {
+            console.log(data.value)
+            $('#clazz').empty();
+            var dept_id = data.value
+            $.ajax({
+                url: '${base}/admin/system/clazz/queryClazz',
+                dataType: 'json',
+                type: 'get',
+                data: {dept_id:dept_id},
+                success: function (data) {
+                    $.each(data.data, function (index, item) {
+
+                        $('#clazz').append(new Option(item.name, item.id));// 下拉菜单里添加元素
+                    });
+                    $("#clazz option[value='${localuser.clazz_id}']").prop("selected",true);
+                    layui.form.render("select");
+                }
+            })
+        });
+        form.on('select(clazz)', function(data){
+        });
         form.on("submit(addUser)",function(data){
             if(data.field.id == null){
                 layer.msg("用户ID不存在");

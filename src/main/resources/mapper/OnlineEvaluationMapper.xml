@@ -4,36 +4,36 @@
 
     <!--生成学生评教的页面-->
     <select id="selectStudentEvaluation" resultType="HashMap">
-       		select cz.code as czcode,c.name as cname,ek.id as eid,c.id as cid,uu.id,uu.nick_name,ur.role_id,r.name,ek.name as ename,r.name as rname,c.code as ccode,c.name as cname from sys_user u
+       		select DISTINCT cz.code as czcode,c.name as cname,ek.id as eid,c.id as cid,uu.id,uu.nick_name,ur.role_id,r.name,ek.name as ename,r.name as rname,c.code as ccode,c.name as cname ,c.id as cid from sys_user u
 	          left join clazz cz on cz.id=u.clazz_id
 	          left join schedules ss on u.clazz_id=ss.clazz_id
               left join course c on ss.course_id=c.id
 			  left join sys_user uu on uu.id=ss.teacher_id
               left join sys_user_role ur on u.id=ur.user_id
 		      left join sys_role r on r.id=ur.role_id,etask ek
-              where u.id=#{user_id} and r.name!="教师"  and ek.status=0 and ek.name!=' 'and u.clazz_id!=' '
+              where u.id=#{user_id} and r.name!="教师"  and ek.status=1 and ek.name!=' 'and u.clazz_id!=' 'and c.id!=''
     </select>
     <!--同行评教页面-->
     <select id="selectColleagueEvaluation" resultType="HashMap">
-    select  DISTINCT ek.name as ename,ek.id as eid,c.id as cid,uu.id,uu.nick_name,d.name as dname,ur.role_id, r.name as rname,c.code as ccode,c.name as cname from sys_user u
+    select  DISTINCT ek.name as ename,ek.id as eid,c.id as cid,uu.id,uu.nick_name,d.name as dname,ur.role_id, r.name as rname,c.code as ccode,c.name as cname ,c.id as cid from sys_user u
 left join schedules ss on u.id=ss.teacher_id
 left join course c on ss.course_id=c.id
           left join sys_user uu on u.dept_id=uu.dept_id
           left join sys_user_role ur on uu.id=ur.user_id
           left join sys_role r on r.id=ur.role_id
           left join dept d on uu.dept_id=d.id,etask ek
-        where u.id=#{user_id} and u.id!=uu.id and r.name="教师" and ek.status=1 and ek.name!=' '
+        where u.id=#{user_id} and u.id!=uu.id and r.name="教师" and ek.status=1 and ek.name!=' 'and c.id!=''
     </select>
     <!--自我评教页面-->
     <select id="selectOneselfEvaluation" resultType="HashMap">
-       select DISTINCT ek.name as ename,uu.id,uu.nick_name,ek.id as eid,c.id as cid,d.name as dname,ur.role_id,r.name as rname,c.code as ccode,c.name as cname from sys_user u
+       select DISTINCT ek.name as ename,uu.id,uu.nick_name,ek.id as eid,c.id as cid,d.name as dname,ur.role_id,r.name as rname,c.code as ccode,c.name as cname ,c.id as cid from sys_user u
         left join schedules ss on u.id=ss.teacher_id
         left join course c on ss.course_id=c.id
           left join sys_user uu on u.dept_id=uu.dept_id
           left join sys_user_role ur on uu.id=ur.user_id
           left join sys_role r on r.id=ur.role_id
           left join dept d on uu.dept_id=d.id,etask ek
-        where u.id=#{user_id} and u.id=uu.id  and r.name="教师"  and ek.status=1 and ek.name!=' '
+        where u.id=#{user_id} and u.id=uu.id  and r.name="教师"  and ek.status=1 and ek.name!=' 'and c.id!=''
     </select>
     <!--动态生成批次搜索下拉框-->
     <select id="selectBatchName" resultType="com.mysiteforme.admin.entity.Etask">
@@ -79,4 +79,14 @@ left join course c on ss.course_id=c.id
        insert into grad_score(`eavaluationId`,`earnedId`,`questionnaireId`,`course_id`,score)
         values(#{eavaluationId},#{earnedId},#{questionnaireId},#{courseId},#{score})
     </insert>
+    <!--查询是否评教-->
+    <select id="selectIfEvaluation" resultType="HashMap">
+        select * from grad_score where eavaluationId=#{eavaluationId} and earnedId=#{earnedId} and course_id=#{courseId}
+         AND questionnaireId=#{questionnaireId}
+    </select>
+
+    <!--查询是否开启评教-->
+    <select id="selectIfStartEvaluation" resultType="com.mysiteforme.admin.entity.Etask">
+        select status from etask where id=#{id}
+    </select>
 </mapper>

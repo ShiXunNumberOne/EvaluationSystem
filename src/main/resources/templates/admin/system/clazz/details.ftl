@@ -183,29 +183,31 @@ console.log(parent.a)
         //             }
         //         });
 
-            } else
-                if(obj.event === 'edit'){
-                    var editIndex = layer.open({
-                        title : "编辑用户",
-                        type : 2,
-                        content : "${base}/admin/system/user/edit?id="+data.id,
-                        success : function(layero, index){
-                            setTimeout(function(){
-                                layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
-                                    tips: 3
-                                });
-                            },500);
-                        }
-                    });
-                    //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
-                    $(window).resize(function(){
-                        layer.full(editIndex);
-                    });
-                    layer.full(editIndex);
+    table.on('tool(demo)', function(obj) {
+        var data = obj.data;
+        if (obj.event === 'edit') {
+            var editIndex = layer.open({
+                title: "编辑用户",
+                type: 2,
+                content: "${base}/admin/system/user/edit?id=" + data.id,
+                success: function (layero, index) {
+                    setTimeout(function () {
+                        layer.tips('点击此处返回会员列表', '.layui-layer-setwin .layui-layer-close', {
+                            tips: 3
+                        });
+                    }, 500);
+                }
+            });
+            //改变窗口大小时，重置弹窗的高度，防止超出可视区域（如F12调出debug的操作）
+            $(window).resize(function () {
+                layer.full(editIndex);
+            });
+            layer.full(editIndex);
 
 
-            }
-        });
+        }
+    });
+
 
         var $ = layui.$, active = {
             getCheckData: function(){ //获取选中数据

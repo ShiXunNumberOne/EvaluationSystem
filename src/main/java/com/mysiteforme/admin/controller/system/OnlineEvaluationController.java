@@ -85,7 +85,32 @@ public class OnlineEvaluationController extends BaseController {
         result.put("data",users);
         return result;
     }
+    @ResponseBody
+    @RequestMapping("selectIfEvaluation")
+    public Map selectIfEvaluation(Long gradeds,Integer course_id,Integer etask_id){
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        Map result = new HashMap();
+        List<HashMap> users = onlineEvaluationService.selectIfEvaluation(MySysUser.id(), gradeds,course_id,etask_id);
+        if (users.size()>0){
+            result.put("data",1);
+        }else{
+            result.put("data",0);
+        }
+        return result;
+    }
 
+    @ResponseBody
+    @RequestMapping("selectIfStartEvaluation")
+    public Map  selectIfStartEvaluation(Integer batch_Id){
+        Map result = new HashMap();
+        List<Etask> batches = onlineEvaluationService.selectIfStartEvaluation(batch_Id);
+        if(batches.get(0).getStatus()==1){
+            result.put("data",1);
+        }else{
+            result.put("data",0);
+        }
+        return result;
+    }
     @ResponseBody
     @RequestMapping("selectBatchIdColleagueEvaluation")
     public Map selectBatchIdColleagueEvaluation(int batch_id){
@@ -121,7 +146,7 @@ public class OnlineEvaluationController extends BaseController {
     }
     @ResponseBody
     @RequestMapping("OnlineEvaluationFraction")
-    public Map OnlineEvaluationFraction(String optionsAll_id,Long eavaluationId ,Long earnedId,Integer questionnaireId,Integer courses_id,String answers,String target_name_id){
+    public Map OnlineEvaluationFraction(String optionsAll_id ,Long earnedId,Integer questionnaireId,Integer courses_id,String answers,String target_name_id){
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)ra).getRequest();
         HttpSession session = request.getSession();
@@ -141,7 +166,7 @@ public class OnlineEvaluationController extends BaseController {
         }
         Float score = Float.valueOf(sum);
         System.out.println(sum);
-        if(onlineEvaluationService.insertOnlineEvaluation(eavaluationId,earnedId,questionnaireId,courses_id,score)){
+        if(onlineEvaluationService.insertOnlineEvaluation(MySysUser.id(),earnedId,questionnaireId,courses_id,score)){
             result.put("data",1);
         }else{
             result.put("data",0);

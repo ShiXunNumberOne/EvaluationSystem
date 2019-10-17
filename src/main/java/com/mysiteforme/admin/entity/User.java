@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.FieldStrategy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mysiteforme.admin.base.DataEntity;
@@ -64,8 +65,14 @@ public class User extends DataEntity<User> {
 	 * 账户是否锁定
 	 */
 	private Boolean locked;
+
+	@TableField(value = "dept_id")
+	@JsonIgnoreProperties(ignoreUnknown = true)
     private Integer dept_id;
+	@TableField(value = "clazz_id")
+	@JsonIgnoreProperties(ignoreUnknown = true)
     private Integer clazz_id;
+
 	@TableField(strategy= FieldStrategy.IGNORED)
 	private String icon;
 
@@ -78,6 +85,20 @@ public class User extends DataEntity<User> {
 	@TableField(exist=false)
 	private Set<Menu> menus = Sets.newHashSet();
 
+
+
+	public Integer getGender() {
+		return gender;
+	}
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
 	public Integer getDept_id() {
 		return dept_id;
 	}
@@ -88,14 +109,6 @@ public class User extends DataEntity<User> {
 
 	public Integer getClazz_id() {
 		return clazz_id;
-	}
-
-	public Integer getGender() {
-		return gender;
-	}
-
-	public void setGender(Integer gender) {
-		this.gender = gender;
 	}
 
 	public void setClazz_id(Integer clazz_id) {

@@ -39,6 +39,8 @@
         u.tel,
         u.gender,
         u.email,
+        u.dept_id,
+        u.clazz_id,
         u.password,
         u.salt,
         u.locked,

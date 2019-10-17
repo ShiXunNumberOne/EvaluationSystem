@@ -16,4 +16,6 @@ public interface EtaskService extends IService<Etask> {
     int closeEtaskById(int id);
     int suspendEtaskById(int id);
     int endEtaskById(int id);
+    int SelectOpen();
+    int onoroffEtaskById(int id);
 }

@@ -82,7 +82,6 @@
 <!--表格的操作-->
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">开始评教</a>
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看评教</a>
 </script>
 
 
@@ -93,28 +92,87 @@
         //监听工具条
         table.on('tool(demo)', function(obj){
             var data = obj.data;
+            console.log(data.cid)
             if(obj.event === 'edit'){//开始评教
-                table.on('tool(demo)', function(obj){
-                    var data = obj.data;
-                    if(obj.event === 'edit'){//开始评教
-                        layer.open({
-                            type:2
-                            ,skin:'layui-layer-rim'//加上边框
-                            // ,maxmin: true //开启最大化最小化按钮
-                            ,area: ["100%","100%"]
-                            ,title: "在线评教"
-                            ,content:"/admin/system/questionnaire/oneself/GoOnlineEvaluation"
-                            ,success: function (layero,index) {
-                                var body = layer.getChildFrame('body', index);
-                                var iframe = window['layui-layer-iframe' + index];
-                                // 向子页面的全局函数
-                                iframe.inputDataHandle(obj);
-                            }
-                        })
+                $.ajax({
+                    type: "get",
+                    url: "/admin/system/onlineEvaluation/selectIfStartEvaluation",
+                    data: {
+                        batch_Id: data.eid
+                    },
+                    success: function (res) {
+                        if(res.data == 1){
+                            $.ajax({
+                                type:"get",
+                                url:"/admin/system/onlineEvaluation/selectIfEvaluation",
+                                data:{
+                                    gradeds:data.id,
+                                    course_id:data.cid,
+                                    etask_id:data.eid,
+                                },
+                                success:function (res) {
+                                    if(res.data==1){
+                                        layer.msg('已经完成评教',{icon:2})
+                                    }else{
+                                        layer.open({
+                                            type:2
+                                            ,skin:'layui-layer-rim'//加上边框
+                                            // ,maxmin: true //开启最大化最小化按钮
+                                            ,area: ["100%","100%"]
+                                            ,title: "欢迎进入,请全部填写完在提交"
+                                            ,content:"/admin/system/questionnaire/oneself/GoOnlineEvaluation"
+                                            ,success: function (layero,index) {
+                                                var body = layer.getChildFrame('body', index);
+                                                var iframe = window['layui-layer-iframe' + index];
+                                                // 向子页面的全局函数
+                                                iframe.inputDataHandle(obj);
+                                            }
+
+                                        })
+                                    }
+                                }
+                            })
+                        }else{
+                            layer.msg('评教已关闭',{icon:2})
+                        }
                     }
-                });
+                })
+
+
+
+            }else if(obj.event === 'detail'){
+                $.ajax({
+                    type:"get",
+                    url:"/ColleagueEvaluation/selectIfEvaluation",
+                    data:{
+                        gradeds:data.user_id,
+                        papers_id:data.papers_id,
+                        courses_id:data.courses_id
+                    },
+                    success:function (res) {
+                        if(res.data==1){
+                            layer.open({
+                                type:2
+                                ,skin:'layui-layer-rim'//加上边框
+                                // ,maxmin: true //开启最大化最小化按钮
+                                ,area: ["100%","100%"]
+                                ,title: "欢迎进入，请全部填写完在提交"
+                                ,content:"/SelectOnlineEvaluationController/GoSelectOnlineEvaluation"
+                                ,success: function (layero,index) {
+                                    var body = layer.getChildFrame('body', index);
+                                    var iframe = window['layui-layer-iframe' + index];
+                                    // 向子页面的全局函数
+                                    iframe.inputDataHandle(obj);
+                                }
+                            })
+                        }else{
+                            layer.msg('还未评教',{icon:2})
+                        }
+                    }
+                })
             }
         });
+
 
         $('.demoTable .layui-btn').on('click', function(){
             var type = $(this).data('type');

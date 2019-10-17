@@ -16,4 +16,6 @@ public interface OnlineEvaluationService {
     List<HashMap> selectBatchIdOneselfEvaluation(Long user_id,int batch_id);
     List<ScoreSum> StudentOnlineEvaluationFraction(int oid, int tid);
     boolean insertOnlineEvaluation(Long eavaluationId, Long earnedId, Integer questionnaireId, Integer course_id,float score);
+    List<HashMap> selectIfEvaluation( Long eavaluationId,Long earnedId,Integer courseId, Integer questionnaireId);
+    List<Etask> selectIfStartEvaluation(Integer batch_id);
 }

@@ -17,6 +17,6 @@ public interface ClazzService extends IService<Clazz> {
 	Clazz selectClazzByMap(int deptId);
 	int updataClazzById(Clazz clazz);
 	int deleteClazzById(int id);
-	int getCountByName(String name);
+	int getCountByName(String code);
 
 }

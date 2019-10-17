@@ -62,4 +62,14 @@ public class OnlineEvaluationServiceImpl implements OnlineEvaluationService {
             return false;
         }
     }
+
+    @Override
+    public List<HashMap> selectIfEvaluation(Long eavaluationId, Long earnedId, Integer courseId,Integer questionnaireId) {
+        return onlineEvaluationDao.selectIfEvaluation(eavaluationId,earnedId,courseId,questionnaireId);
+    }
+
+    @Override
+    public List<Etask> selectIfStartEvaluation(Integer batch_id) {
+        return onlineEvaluationDao.selectIfStartEvaluation(batch_id);
+    }
 }

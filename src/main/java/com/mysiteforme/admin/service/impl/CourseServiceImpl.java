@@ -59,10 +59,10 @@ public class CourseServiceImpl  extends ServiceImpl<CourseDao, Course> implement
 	}
 
 	@Override
-	public int getCountByName(String name) {
+	public int getCountByName(String code) {
 		EntityWrapper<Course> wrapper = new EntityWrapper<>();
 		wrapper.eq("status",1);
-		wrapper.eq("name",name);
+		wrapper.eq("code",code);
 		return baseMapper.selectCount(wrapper);
 	}
 

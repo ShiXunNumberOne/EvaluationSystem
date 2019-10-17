@@ -65,10 +65,10 @@ public class ClazzServiceImpl  extends ServiceImpl<ClazzDao, Clazz> implements C
 	}
 
 	@Override
-	public int getCountByName(String name) {
+	public int getCountByName(String code) {
 		EntityWrapper<Clazz> wrapper = new EntityWrapper<>();
 		wrapper.eq("status",1);
-		wrapper.eq("name",name);
+		wrapper.eq("code",code);
 		return baseMapper.selectCount(wrapper);
 	}
 

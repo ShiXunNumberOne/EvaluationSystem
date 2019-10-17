@@ -46,15 +46,15 @@ public class SchedulesController extends BaseController {
     @ResponseBody
     @SysLog("保存新增班级数据")
     public RestResponse add(@RequestBody Schedules schedules){
-//        if(schedules.getCourses() == null || schedules.getCourses() .size()==1){
-//            return RestResponse.failure("请选择课程");
-//        }
-//        if(schedules.getClazzs() == null || schedules.getClazzs() .size()==1){
-//            return  RestResponse.failure("请选择班级");
-//        }
-//        if(schedules.getUsers() == null || schedules.getUsers() .size()==1){
-//            return  RestResponse.failure("请选择老师");
-//        }
+        if(schedules.getCourses() == null || schedules.getCourses() .size()==1){
+            return RestResponse.failure("请选择课程");
+        }
+        if(schedules.getClazzs() == null || schedules.getClazzs() .size()==1){
+            return  RestResponse.failure("请选择班级");
+        }
+        if(schedules.getUsers() == null || schedules.getUsers() .size()==1){
+            return  RestResponse.failure("请选择老师");
+        }
 
         schedulesService.saveSchedules(schedules);
         if(schedules.getId() == null || schedules.getId() == 0){
@@ -62,16 +62,18 @@ public class SchedulesController extends BaseController {
         }
         return RestResponse.success();
     }
+
     @GetMapping("edit")
     public String edit(int id, Model model){
         Schedules schedules =schedulesService.findSchedulesById(id);
         model.addAttribute("schedules",schedules);
+        System.out.println(schedules.getUsers());
         return "admin/system/teach/edit";
     }
 
     @PostMapping("edit")
     @ResponseBody
-    @SysLog("保存班级编辑数据")
+    @SysLog("保存授课编辑数据")
     public RestResponse edit(@RequestBody  Schedules schedules){
         if(schedules.getId() == 0 || schedules.getId() == null){
             return RestResponse.failure("ID不能为空");
